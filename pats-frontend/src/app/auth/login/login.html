@@ -1,0 +1,80 @@
+<div class="login-container">
+  <!-- Left Side - Form -->
+  <div class="login-content">
+    <div class="login-card">
+      <div class="brand-section">
+        <div class="brand-icon">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+            <path d="M3.22 12H9.5l.5-1 2 4.5 2-7 1.5 3.5h5.27"/>
+          </svg>
+        </div>
+        <h1 class="brand-title">Welcome Back</h1>
+        <p class="brand-subtitle">Sign in to continue to PATS</p>
+      </div>
+
+      <div *ngIf="showSuccessMessage" class="alert alert-success" role="alert">
+        <strong>Registration successful!</strong> Please login with your credentials.
+      </div>
+
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input
+            type="text"
+            id="username"
+            class="form-input"
+            formControlName="username"
+            placeholder="Enter your username"
+            [class.invalid]="loginForm.get('username')?.invalid && loginForm.get('username')?.touched">
+          <span class="error-text" *ngIf="loginForm.get('username')?.invalid && loginForm.get('username')?.touched">
+            Username is required
+          </span>
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            class="form-input"
+            formControlName="password"
+            placeholder="Enter your password"
+            [class.invalid]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+          <span class="error-text" *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+            Password is required
+          </span>
+        </div>
+
+        <div *ngIf="errorMessage" class="alert alert-danger">
+          {{ errorMessage }}
+        </div>
+
+        <button
+          type="submit"
+          class="btn-primary"
+          [disabled]="loading || loginForm.invalid">
+          <span *ngIf="loading" class="spinner"></span>
+          {{ loading ? 'Logging in...' : 'Login' }}
+        </button>
+      </form>
+
+      <div class="divider">
+        <span>or</span>
+      </div>
+
+      <div class="register-link">
+        Don't have an account? <a routerLink="/register">Create one</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right Side - Background -->
+  <div class="login-background">
+    <div class="background-overlay"></div>
+    <div class="background-content">
+      <h2>Psychology Application for Therapeutic Support</h2>
+      <p>Connect with licensed psychologists, track your mental health journey, and access professional therapeutic support from anywhere.</p>
+    </div>
+  </div>
+</div>

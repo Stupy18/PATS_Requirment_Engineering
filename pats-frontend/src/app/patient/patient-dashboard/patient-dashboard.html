@@ -1,182 +1,210 @@
-<div class="dashboard-wrapper">
-  <!-- Shared Navbar Component -->
+<div class="dashboard-layout">
   <app-navbar></app-navbar>
 
-  <!-- Main Dashboard Container -->
-  <div class="dashboard-container">
-    <!-- Welcome Section -->
-    <div class="welcome-section">
-      <div class="welcome-content">
-        <h1>Welcome back, {{ currentUser?.username }}! 👋</h1>
-        <p>Track your mental health journey and stay connected with your psychologist</p>
-      </div>
-      <div class="date-display">
-        <div class="date-icon">📅</div>
-        <div class="date-info">
-          <span class="date-label">Today</span>
-          <span class="date-value">{{ getCurrentDate() }}</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Stats Section -->
-    <div class="stats-section">
-      <div class="stat-box mood">
-        <div class="stat-header">
-          <div class="stat-icon-wrapper">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="12" cy="12" r="10"/>
-              <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
-              <line x1="9" y1="9" x2="9.01" y2="9"/>
-              <line x1="15" y1="9" x2="15.01" y2="9"/>
-            </svg>
-          </div>
-          <span class="stat-title">Today's Mood</span>
-        </div>
-        <div class="stat-body">
-          <div class="stat-main">Not logged yet</div>
-          <div class="stat-sub">Track your emotional state</div>
-        </div>
-      </div>
-
-      <div class="stat-box appointment">
-        <div class="stat-header">
-          <div class="stat-icon-wrapper">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-              <line x1="16" y1="2" x2="16" y2="6"/>
-              <line x1="8" y1="2" x2="8" y2="6"/>
-              <line x1="3" y1="10" x2="21" y2="10"/>
-            </svg>
-          </div>
-          <span class="stat-title">Next Appointment</span>
-        </div>
-        <div class="stat-body">
-          <div class="stat-main">No upcoming</div>
-          <div class="stat-sub">Book your next session</div>
-        </div>
-      </div>
-
-      <div class="stat-box sessions">
-        <div class="stat-header">
-          <div class="stat-icon-wrapper">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
-            </svg>
-          </div>
-          <span class="stat-title">Total Sessions</span>
-        </div>
-        <div class="stat-body">
-          <div class="stat-main">0</div>
-          <div class="stat-sub">Completed sessions</div>
-        </div>
-      </div>
-
-      <div class="stat-box plans">
-        <div class="stat-header">
-          <div class="stat-icon-wrapper">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-              <polyline points="14 2 14 8 20 8"/>
-            </svg>
-          </div>
-          <span class="stat-title">Active Plans</span>
-        </div>
-        <div class="stat-body">
-          <div class="stat-main">0</div>
-          <div class="stat-sub">Treatment plans</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Quick Actions -->
-    <div class="section-header">
-      <h2>Quick Actions</h2>
-      <p>Manage your mental health journey</p>
-    </div>
-
-    <div class="actions-grid">
-      <button class="action-item">
-        <div class="action-icon mood-icon">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="12" cy="12" r="10"/>
-            <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
-            <line x1="9" y1="9" x2="9.01" y2="9"/>
-            <line x1="15" y1="9" x2="15.01" y2="9"/>
+  <div class="main-layout">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <nav class="nav-menu">
+        <a href="#" class="nav-link active">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="7"/>
+            <rect x="14" y="3" width="7" height="7"/>
+            <rect x="14" y="14" width="7" height="7"/>
+            <rect x="3" y="14" width="7" height="7"/>
           </svg>
-        </div>
-        <div class="action-content">
-          <h3>Track Mood</h3>
-          <p>Log your daily emotions</p>
-        </div>
-        <div class="action-arrow">→</div>
-      </button>
-
-      <button class="action-item">
-        <div class="action-icon appointment-icon">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          Overview
+        </a>
+        <a href="#" class="nav-link">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+            <polyline points="9 22 9 12 15 12 15 22"/>
+          </svg>
+          Mood Journal
+        </a>
+        <a href="#" class="nav-link">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
             <line x1="16" y1="2" x2="16" y2="6"/>
             <line x1="8" y1="2" x2="8" y2="6"/>
             <line x1="3" y1="10" x2="21" y2="10"/>
           </svg>
-        </div>
-        <div class="action-content">
-          <h3>Book Appointment</h3>
-          <p>Schedule with your psychologist</p>
-        </div>
-        <div class="action-arrow">→</div>
-      </button>
-
-      <button class="action-item">
-        <div class="action-icon records-icon">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          Appointments
+        </a>
+        <a href="#" class="nav-link">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
             <polyline points="14 2 14 8 20 8"/>
-            <line x1="16" y1="13" x2="8" y2="13"/>
-            <line x1="16" y1="17" x2="8" y2="17"/>
-            <polyline points="10 9 9 9 8 9"/>
           </svg>
-        </div>
-        <div class="action-content">
-          <h3>Medical Records</h3>
-          <p>View your history</p>
-        </div>
-        <div class="action-arrow">→</div>
-      </button>
-
-      <button class="action-item">
-        <div class="action-icon resources-icon">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          Medical Records
+        </a>
+        <a href="#" class="nav-link">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <circle cx="12" cy="12" r="10"/>
             <line x1="12" y1="16" x2="12" y2="12"/>
             <line x1="12" y1="8" x2="12.01" y2="8"/>
           </svg>
-        </div>
-        <div class="action-content">
-          <h3>Resources</h3>
-          <p>Mental health support</p>
-        </div>
-        <div class="action-arrow">→</div>
-      </button>
-    </div>
+          Resources
+        </a>
+      </nav>
+    </aside>
 
-    <!-- Recent Activity -->
-    <div class="section-header">
-      <h2>Recent Activity</h2>
-      <p>Your latest updates</p>
-    </div>
+    <!-- Main Content Area -->
+    <main class="content-area">
+      <!-- Page Header -->
+      <header class="page-header">
+        <div>
+          <h1 class="page-title">Patient Dashboard</h1>
+          <p class="page-subtitle">{{ getCurrentDate() }}</p>
+        </div>
+        <button class="btn-primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="5" x2="12" y2="19"/>
+            <line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+          New Entry
+        </button>
+      </header>
 
-    <div class="activity-section">
-      <div class="empty-state">
-        <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
-          <line x1="9" y1="9" x2="15" y2="9"/>
-          <line x1="9" y1="15" x2="15" y2="15"/>
-        </svg>
-        <h3>No activity yet</h3>
-        <p>Start tracking your mood or book an appointment to see your activity here</p>
+      <!-- Stats Grid -->
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-header">
+            <span class="metric-label">Today's Check-in</span>
+            <span class="metric-status status-pending">Pending</span>
+          </div>
+          <div class="metric-value">—</div>
+          <div class="metric-footer">
+            <span class="metric-change">Log your mood to track progress</span>
+          </div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-header">
+            <span class="metric-label">Next Appointment</span>
+            <span class="metric-status status-none">None</span>
+          </div>
+          <div class="metric-value">—</div>
+          <div class="metric-footer">
+            <a href="#" class="metric-action">Schedule appointment →</a>
+          </div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-header">
+            <span class="metric-label">Sessions This Month</span>
+          </div>
+          <div class="metric-value">0<span class="metric-unit"> / 4</span></div>
+          <div class="metric-footer">
+            <span class="metric-change neutral">0% of monthly goal</span>
+          </div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-header">
+            <span class="metric-label">Treatment Progress</span>
+          </div>
+          <div class="metric-value">0<span class="metric-unit">%</span></div>
+          <div class="metric-footer">
+            <span class="metric-change">No active plan</span>
+          </div>
+        </div>
       </div>
-    </div>
+
+      <!-- Two Column Layout -->
+      <div class="two-column-layout">
+        <!-- Recent Activity -->
+        <section class="card">
+          <div class="card-header">
+            <h2 class="card-title">Recent Activity</h2>
+            <a href="#" class="card-action">View all</a>
+          </div>
+          <div class="card-content">
+            <div class="empty-state-compact">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <line x1="8" y1="6" x2="21" y2="6"/>
+                <line x1="8" y1="12" x2="21" y2="12"/>
+                <line x1="8" y1="18" x2="21" y2="18"/>
+                <line x1="3" y1="6" x2="3.01" y2="6"/>
+                <line x1="3" y1="12" x2="3.01" y2="12"/>
+                <line x1="3" y1="18" x2="3.01" y2="18"/>
+              </svg>
+              <p>No recent activity</p>
+              <span>Your mood entries and appointments will appear here</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- Upcoming Appointments -->
+        <section class="card">
+          <div class="card-header">
+            <h2 class="card-title">Upcoming Sessions</h2>
+            <a href="#" class="card-action">View calendar</a>
+          </div>
+          <div class="card-content">
+            <div class="empty-state-compact">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                <line x1="16" y1="2" x2="16" y2="6"/>
+                <line x1="8" y1="2" x2="8" y2="6"/>
+                <line x1="3" y1="10" x2="21" y2="10"/>
+              </svg>
+              <p>No upcoming appointments</p>
+              <span>Book a session with your psychologist</span>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- Quick Actions Bar -->
+      <section class="card">
+        <div class="card-header">
+          <h2 class="card-title">Quick Actions</h2>
+        </div>
+        <div class="card-content">
+          <div class="action-list">
+            <button class="action-list-item">
+              <div class="action-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                  <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                </svg>
+              </div>
+              <div class="action-text">
+                <h3>Log Mood Entry</h3>
+                <p>Record your emotional state for today</p>
+              </div>
+            </button>
+
+            <button class="action-list-item">
+              <div class="action-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                  <line x1="16" y1="2" x2="16" y2="6"/>
+                  <line x1="8" y1="2" x2="8" y2="6"/>
+                  <line x1="3" y1="10" x2="21" y2="10"/>
+                </svg>
+              </div>
+              <div class="action-text">
+                <h3>Schedule Appointment</h3>
+                <p>Book your next therapy session</p>
+              </div>
+            </button>
+
+            <button class="action-list-item">
+              <div class="action-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                  <polyline points="14 2 14 8 20 8"/>
+                </svg>
+              </div>
+              <div class="action-text">
+                <h3>View Medical Records</h3>
+                <p>Access your treatment history and documents</p>
+              </div>
+            </button>
+          </div>
+        </div>
+      </section>
+    </main>
   </div>
 </div>

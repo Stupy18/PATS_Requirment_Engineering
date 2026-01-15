@@ -3,18 +3,19 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { BookAppointmentComponent } from './book-appointment.component';
 import { AppointmentService } from '../../services/appointment.service';
 import { of, throwError } from 'rxjs';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 
 describe('BookAppointmentComponent', () => {
   let component: BookAppointmentComponent;
   let fixture: ComponentFixture<BookAppointmentComponent>;
-  let appointmentService: jasmine.SpyObj<AppointmentService>;
+  let appointmentService: any;
 
   beforeEach(async () => {
-    const appointmentServiceSpy = jasmine.createSpyObj('AppointmentService', [
-      'bookAppointment',
-      'getAvailableSlots',
-      'getAppointmentsByPatient'
-    ]);
+    const appointmentServiceSpy = {
+      bookAppointment: vi.fn().mockReturnValue(of({})),
+      getAvailableSlots: vi.fn().mockReturnValue(of([])),
+      getAppointmentsByPatient: vi.fn().mockReturnValue(of([]))
+    };
 
     await TestBed.configureTestingModule({
       imports: [BookAppointmentComponent, ReactiveFormsModule],
@@ -23,7 +24,7 @@ describe('BookAppointmentComponent', () => {
       ]
     }).compileComponents();
 
-    appointmentService = TestBed.inject(AppointmentService) as jasmine.SpyObj<AppointmentService>;
+    appointmentService = TestBed.inject(AppointmentService);
     fixture = TestBed.createComponent(BookAppointmentComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -49,7 +50,7 @@ describe('BookAppointmentComponent', () => {
       }
     ];
 
-    appointmentService.getAvailableSlots.and.returnValue(of(mockSlots));
+    appointmentService.getAvailableSlots.mockReturnValue(of(mockSlots));
 
     component.bookingForm.patchValue({
       psychologistId: 1,
@@ -77,7 +78,7 @@ describe('BookAppointmentComponent', () => {
       type: 'INITIAL'
     };
 
-    appointmentService.bookAppointment.and.returnValue(of(mockAppointment));
+    appointmentService.bookAppointment.mockReturnValue(of(mockAppointment));
 
     component.bookingForm.patchValue({
       psychologistId: 1,
@@ -98,7 +99,7 @@ describe('BookAppointmentComponent', () => {
    */
   it('should handle double-booking error', () => {
     const error = { error: { message: 'Time slot already booked' } };
-    appointmentService.bookAppointment.and.returnValue(throwError(() => error));
+    appointmentService.bookAppointment.mockReturnValue(throwError(() => error));
 
     component.bookingForm.patchValue({
       psychologistId: 1,

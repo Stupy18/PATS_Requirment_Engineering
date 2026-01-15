@@ -3,19 +3,20 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { AvailabilityScheduleComponent } from './availability-schedule.component';
 import { AvailabilityService } from '../../services/availability.service';
 import { of, throwError } from 'rxjs';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 
 describe('AvailabilityScheduleComponent', () => {
   let component: AvailabilityScheduleComponent;
   let fixture: ComponentFixture<AvailabilityScheduleComponent>;
-  let availabilityService: jasmine.SpyObj<AvailabilityService>;
+  let availabilityService: any;
 
   beforeEach(async () => {
-    const availabilityServiceSpy = jasmine.createSpyObj('AvailabilityService', [
-      'createAvailability',
-      'updateAvailability',
-      'deleteAvailability',
-      'getAllAvailabilities'
-    ]);
+    const availabilityServiceSpy = {
+      createAvailability: vi.fn().mockReturnValue(of({})),
+      updateAvailability: vi.fn().mockReturnValue(of({})),
+      deleteAvailability: vi.fn().mockReturnValue(of({})),
+      getAllAvailabilities: vi.fn().mockReturnValue(of([]))
+    };
 
     await TestBed.configureTestingModule({
       imports: [AvailabilityScheduleComponent, ReactiveFormsModule],
@@ -24,7 +25,7 @@ describe('AvailabilityScheduleComponent', () => {
       ]
     }).compileComponents();
 
-    availabilityService = TestBed.inject(AvailabilityService) as jasmine.SpyObj<AvailabilityService>;
+    availabilityService = TestBed.inject(AvailabilityService);
     fixture = TestBed.createComponent(AvailabilityScheduleComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -49,7 +50,7 @@ describe('AvailabilityScheduleComponent', () => {
       }
     ];
 
-    availabilityService.getAllAvailabilities.and.returnValue(of(mockAvailabilities));
+    availabilityService.getAllAvailabilities.mockReturnValue(of(mockAvailabilities));
 
     component.ngOnInit();
 
@@ -70,8 +71,8 @@ describe('AvailabilityScheduleComponent', () => {
       isAvailable: true
     };
 
-    availabilityService.createAvailability.and.returnValue(of(mockAvailability));
-    availabilityService.getAllAvailabilities.and.returnValue(of([mockAvailability]));
+    availabilityService.createAvailability.mockReturnValue(of(mockAvailability));
+    availabilityService.getAllAvailabilities.mockReturnValue(of([mockAvailability]));
 
     component.availabilityForm.patchValue({
       dayOfWeek: 'MONDAY',
@@ -89,9 +90,9 @@ describe('AvailabilityScheduleComponent', () => {
    * Test FR9.1 - Delete availability
    */
   it('should delete availability when confirmed', () => {
-    spyOn(window, 'confirm').and.returnValue(true);
-    availabilityService.deleteAvailability.and.returnValue(of(null));
-    availabilityService.getAllAvailabilities.and.returnValue(of([]));
+    vi.spyOn(window, 'confirm').mockReturnValue(true);
+    availabilityService.deleteAvailability.mockReturnValue(of(null));
+    availabilityService.getAllAvailabilities.mockReturnValue(of([]));
 
     component.deleteAvailability(1);
 

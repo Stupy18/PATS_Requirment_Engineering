@@ -2,17 +2,18 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AppointmentHistoryComponent } from './appointment-history.component';
 import { AppointmentService } from '../../services/appointment.service';
 import { of, throwError } from 'rxjs';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 
 describe('AppointmentHistoryComponent', () => {
   let component: AppointmentHistoryComponent;
   let fixture: ComponentFixture<AppointmentHistoryComponent>;
-  let appointmentService: jasmine.SpyObj<AppointmentService>;
+  let appointmentService: any;
 
   beforeEach(async () => {
-    const appointmentServiceSpy = jasmine.createSpyObj('AppointmentService', [
-      'getPatientAppointmentHistory',
-      'getAppointmentsByPatient'
-    ]);
+    const appointmentServiceSpy = {
+      getPatientAppointmentHistory: vi.fn().mockReturnValue(of([])),
+      getAppointmentsByPatient: vi.fn().mockReturnValue(of([]))
+    };
 
     await TestBed.configureTestingModule({
       imports: [AppointmentHistoryComponent],
@@ -21,7 +22,7 @@ describe('AppointmentHistoryComponent', () => {
       ]
     }).compileComponents();
 
-    appointmentService = TestBed.inject(AppointmentService) as jasmine.SpyObj<AppointmentService>;
+    appointmentService = TestBed.inject(AppointmentService);
     fixture = TestBed.createComponent(AppointmentHistoryComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -57,8 +58,8 @@ describe('AppointmentHistoryComponent', () => {
       }
     ];
 
-    appointmentService.getPatientAppointmentHistory.and.returnValue(of(mockHistory));
-    appointmentService.getAppointmentsByPatient.and.returnValue(of(mockAppointments));
+    appointmentService.getPatientAppointmentHistory.mockReturnValue(of(mockHistory));
+    appointmentService.getAppointmentsByPatient.mockReturnValue(of(mockAppointments));
 
     component.ngOnInit();
 

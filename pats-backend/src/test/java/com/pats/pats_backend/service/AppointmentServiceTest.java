@@ -4,8 +4,6 @@ import com.pats.pats_backend.entity.*;
 import com.pats.pats_backend.enums.AppointmentStatus;
 import com.pats.pats_backend.enums.UserRole;
 import com.pats.pats_backend.repo.AppointmentRepository;
-import com.pats.pats_backend.repo.PatientRepository;
-import com.pats.pats_backend.repo.PsychologistRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

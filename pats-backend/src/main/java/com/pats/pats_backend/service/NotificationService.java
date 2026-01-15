@@ -1,7 +1,6 @@
 package com.pats.pats_backend.service;
 
 import com.pats.pats_backend.entity.Appointment;
-import com.pats.pats_backend.entity.AppointmentHistory;
 import com.pats.pats_backend.entity.AppointmentReminder;
 import org.springframework.stereotype.Service;
 

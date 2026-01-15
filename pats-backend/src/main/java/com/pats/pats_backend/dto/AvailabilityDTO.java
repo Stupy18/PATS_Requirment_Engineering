@@ -21,4 +21,68 @@ public class AvailabilityDTO {
     private LocalDate specificDate;
     private Boolean isAvailable;
     private String notes;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getPsychologistId() {
+        return psychologistId;
+    }
+
+    public void setPsychologistId(Long psychologistId) {
+        this.psychologistId = psychologistId;
+    }
+
+    public DayOfWeek getDayOfWeek() {
+        return dayOfWeek;
+    }
+
+    public void setDayOfWeek(DayOfWeek dayOfWeek) {
+        this.dayOfWeek = dayOfWeek;
+    }
+
+    public LocalTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(LocalTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public LocalTime getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(LocalTime endTime) {
+        this.endTime = endTime;
+    }
+
+    public LocalDate getSpecificDate() {
+        return specificDate;
+    }
+
+    public void setSpecificDate(LocalDate specificDate) {
+        this.specificDate = specificDate;
+    }
+
+    public Boolean getIsAvailable() {
+        return isAvailable;
+    }
+
+    public void setIsAvailable(Boolean available) {
+        isAvailable = available;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
 }

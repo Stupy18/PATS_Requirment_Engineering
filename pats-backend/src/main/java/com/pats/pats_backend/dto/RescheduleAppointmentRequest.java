@@ -13,4 +13,20 @@ public class RescheduleAppointmentRequest {
 
     private Long appointmentId;
     private LocalDateTime newDateTime;
+
+    public Long getAppointmentId() {
+        return appointmentId;
+    }
+
+    public void setAppointmentId(Long appointmentId) {
+        this.appointmentId = appointmentId;
+    }
+
+    public LocalDateTime getNewDateTime() {
+        return newDateTime;
+    }
+
+    public void setNewDateTime(LocalDateTime newDateTime) {
+        this.newDateTime = newDateTime;
+    }
 }

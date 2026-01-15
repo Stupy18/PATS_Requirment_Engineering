@@ -16,4 +16,52 @@ public class AppointmentHistoryDTO {
     private String notes;
     private Integer actualDurationMinutes;
     private String externalCalendarProvider;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getAppointmentId() {
+        return appointmentId;
+    }
+
+    public void setAppointmentId(Long appointmentId) {
+        this.appointmentId = appointmentId;
+    }
+
+    public AttendanceStatus getAttendanceStatus() {
+        return attendanceStatus;
+    }
+
+    public void setAttendanceStatus(AttendanceStatus attendanceStatus) {
+        this.attendanceStatus = attendanceStatus;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
+    public Integer getActualDurationMinutes() {
+        return actualDurationMinutes;
+    }
+
+    public void setActualDurationMinutes(Integer actualDurationMinutes) {
+        this.actualDurationMinutes = actualDurationMinutes;
+    }
+
+    public String getExternalCalendarProvider() {
+        return externalCalendarProvider;
+    }
+
+    public void setExternalCalendarProvider(String externalCalendarProvider) {
+        this.externalCalendarProvider = externalCalendarProvider;
+    }
 }

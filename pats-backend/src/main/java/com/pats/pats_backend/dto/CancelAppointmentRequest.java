@@ -11,4 +11,20 @@ public class CancelAppointmentRequest {
 
     private Long appointmentId;
     private String cancellationReason;
+
+    public Long getAppointmentId() {
+        return appointmentId;
+    }
+
+    public void setAppointmentId(Long appointmentId) {
+        this.appointmentId = appointmentId;
+    }
+
+    public String getCancellationReason() {
+        return cancellationReason;
+    }
+
+    public void setCancellationReason(String cancellationReason) {
+        this.cancellationReason = cancellationReason;
+    }
 }

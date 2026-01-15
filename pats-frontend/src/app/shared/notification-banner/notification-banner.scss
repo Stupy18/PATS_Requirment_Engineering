@@ -1,0 +1,147 @@
+.notification-container {
+  position: fixed;
+  top: 80px;
+  right: 20px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 420px;
+  width: 100%;
+}
+
+.notification {
+  background: white;
+  border: 1px solid #e1e4e8;
+  border-left-width: 4px;
+  border-radius: 6px;
+  padding: 16px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.notification-info {
+  border-left-color: #0366d6;
+}
+
+.notification-success {
+  border-left-color: #28a745;
+}
+
+.notification-warning {
+  border-left-color: #ffc107;
+  background: #fffbf0;
+}
+
+.notification-error {
+  border-left-color: #d73a49;
+  background: #fff5f5;
+}
+
+.notification-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  flex: 1;
+}
+
+.notification-icon {
+  font-size: 20px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.notification-info .notification-icon {
+  color: #0366d6;
+}
+
+.notification-success .notification-icon {
+  color: #28a745;
+}
+
+.notification-warning .notification-icon {
+  color: #e5a800;
+}
+
+.notification-error .notification-icon {
+  color: #d73a49;
+}
+
+.notification-message {
+  color: #24292e;
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.notification-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.btn-action {
+  background: #0366d6;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s;
+
+  &:hover {
+    background: #0256c2;
+  }
+}
+
+.btn-dismiss {
+  background: none;
+  border: none;
+  color: #586069;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 4px 8px;
+  transition: color 0.2s;
+
+  &:hover {
+    color: #24292e;
+  }
+}
+
+@media (max-width: 768px) {
+  .notification-container {
+    top: 60px;
+    right: 12px;
+    left: 12px;
+    max-width: none;
+  }
+
+  .notification {
+    flex-direction: column;
+  }
+
+  .notification-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}

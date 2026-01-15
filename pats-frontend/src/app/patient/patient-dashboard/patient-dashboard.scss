@@ -309,6 +309,73 @@
   color: #586069;
 }
 
+.action-status {
+  margin-left: auto;
+}
+
+.badge-success {
+  background: #28a745;
+  color: white;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* Mood Check-in specific styles */
+.status-completed {
+  background: #28a745 !important;
+  color: white !important;
+}
+
+.status-loading {
+  background: #6c757d;
+  color: white;
+}
+
+.metric-card.completed {
+  border-left: 3px solid #28a745;
+  background: #f0fff4;
+}
+
+.mood-display {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.mood-emoji {
+  font-size: 2.5rem;
+}
+
+.mood-rating {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #0366d6;
+}
+
+.metric-action-btn {
+  background: #0366d6;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: background 0.2s;
+
+  &:hover {
+    background: #0256c2;
+  }
+}
+
+.metric-change.success {
+  color: #28a745;
+  font-weight: 500;
+}
+
 /* Responsive */
 @media (max-width: 1200px) {
   .two-column-layout {

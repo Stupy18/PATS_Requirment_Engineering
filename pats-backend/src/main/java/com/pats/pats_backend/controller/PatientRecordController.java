@@ -22,11 +22,15 @@ public class PatientRecordController {
 
     // ==================== FR17.1: Patient Records ====================
 
-    @PostMapping("/records")
+    @PostMapping("/records/patient/{patientId}")
     @PreAuthorize("hasRole('PSYCHOLOGIST')")
-    public ResponseEntity<PatientRecord> createRecord(@Valid @RequestBody PatientRecordRequest request) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(service.createPatientRecord(request));
-    }
+    public ResponseEntity<PatientRecord> createRecord(
+        @PathVariable Long patientId,
+        @Valid @RequestBody PatientRecordRequest request) {
+    
+    return ResponseEntity.status(HttpStatus.CREATED)
+            .body(service.createPatientRecord(patientId, request));
+}
 
     @GetMapping("/records/{id}")
     @PreAuthorize("hasAnyRole('PSYCHOLOGIST', 'PATIENT')")

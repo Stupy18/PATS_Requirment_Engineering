@@ -1,28 +1,11 @@
 export interface PatientRecord {
   id?: number;
   patientId: number;
-  
-  // Demographics
-  firstName: string;
-  lastName: string;
-  dateOfBirth: Date;
-  gender?: string;
   cnp?: string;
-  
-  // Contact
-  email: string;
-  phoneNumber: string;
+  occupation?: string;
   alternatePhone?: string;
-  
-  // Address
   streetAddress?: string;
   city?: string;
-  country?: string;
+  county?: string;
   postalCode?: string;
-  
-  // Additional
-  occupation?: string;
-  isActive?: boolean;
-  createdAt?: Date;
-  updatedAt?: Date;
 }

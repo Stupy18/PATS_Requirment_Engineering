@@ -1,6 +1,6 @@
 <div class="container">
   <div class="form-card">
-    <h2>Patient Record</h2>
+    <h2>Electronic Medical Record (EMR)</h2>
     
     <div *ngIf="errorMessage" class="alert alert-error">
       <strong>Error:</strong> {{ errorMessage }}
@@ -16,9 +16,9 @@
     </div>
 
     <form (ngSubmit)="onSubmit()" #recordForm="ngForm">
-      <!-- IMPORTANT: Patient Selection -->
+      
       <div class="form-section highlight-section">
-        <h3>📋 Select Patient</h3>
+        <h3>📋 Step 1: Select Patient</h3>
         <div class="form-group">
           <label for="patientId">Select Patient *</label>
           <select
@@ -34,117 +34,65 @@
               {{ patient.firstName }} {{ patient.lastName }} (ID: {{ patient.id }})
             </option>
           </select>
-          <small class="form-help" *ngIf="loadingPatients">
-            Loading patients...
-          </small>
-          <small class="form-help" *ngIf="!loadingPatients && patients.length === 0">
-            ⚠️ No patients found. <a routerLink="/psychologist/patients/new">Add a patient first</a>
-          </small>
-          <small class="form-help" *ngIf="!loadingPatients && patients.length > 0">
-            💡 Select a patient from the dropdown. Form will auto-fill with their data.
-          </small>
+          <small class="form-help" *ngIf="loadingPatients">Loading patients...</small>
         </div>
       </div>
 
-      <!-- Demographics Section -->
-      <div class="form-section">
-        <h3>Demographics</h3>
+      <div class="form-section info-display-section" *ngIf="selectedPatient">
+        <h3>👤 Patient Identity (Read-Only)</h3>
+        <div class="patient-details-grid">
+          <div class="detail-item">
+            <label>Full Name</label>
+            <p>{{ selectedPatient.firstName }} {{ selectedPatient.lastName }}</p>
+          </div>
+          <div class="detail-item">
+            <label>Email Address</label>
+            <p>{{ selectedPatient.user?.email }}</p>
+          </div>
+          <div class="detail-item">
+            <label>Date of Birth</label>
+            <p>{{ selectedPatient.dateOfBirth | date:'longDate' }}</p>
+          </div>
+          <div class="detail-item">
+            <label>Gender</label>
+            <p>{{ selectedPatient.gender || 'Not specified' }}</p>
+          </div>
+          <div class="detail-item">
+            <label>Core Phone</label>
+            <p>{{ selectedPatient.phoneNumber || 'Not specified' }}</p>
+          </div>
+        </div>
+        <p class="info-note">💡 These details are managed in the core Patient Profile.</p>
+      </div>
+
+      <div class="form-section" *ngIf="record.patientId !== 0">
+        <h3>🏥 Step 2: Medical Record Details</h3>
         
-        <div class="form-row">
-          <div class="form-group">
-            <label for="firstName">First Name *</label>
-            <input
-              type="text"
-              id="firstName"
-              name="firstName"
-              [(ngModel)]="record.firstName"
-              required
-              class="form-control"
-            />
-          </div>
-
-          <div class="form-group">
-            <label for="lastName">Last Name *</label>
-            <input
-              type="text"
-              id="lastName"
-              name="lastName"
-              [(ngModel)]="record.lastName"
-              required
-              class="form-control"
-            />
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label for="dateOfBirth">Date of Birth *</label>
-            <input
-              type="date"
-              id="dateOfBirth"
-              name="dateOfBirth"
-              [(ngModel)]="record.dateOfBirth"
-              required
-              class="form-control"
-            />
-          </div>
-
-          <div class="form-group">
-            <label for="gender">Gender</label>
-            <select
-              id="gender"
-              name="gender"
-              [(ngModel)]="record.gender"
-              class="form-control"
-            >
-              <option value="">Select...</option>
-              <option value="MALE">Male</option>
-              <option value="FEMALE">Female</option>
-              <option value="OTHER">Other</option>
-            </select>
-          </div>
-        </div>
-
         <div class="form-group">
-          <label for="cnp">CNP (Romanian Personal Code)</label>
+          <label for="cnp">CNP (Romanian Personal Code) *</label>
           <input
             type="text"
             id="cnp"
             name="cnp"
             [(ngModel)]="record.cnp"
+            required
             maxlength="13"
+            minlength="13"
             class="form-control"
             placeholder="1234567890123"
-          />
-        </div>
-      </div>
-
-      <!-- Contact Information Section -->
-      <div class="form-section">
-        <h3>Contact Information</h3>
-        
-        <div class="form-group">
-          <label for="email">Email *</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            [(ngModel)]="record.email"
-            required
-            class="form-control"
           />
         </div>
 
         <div class="form-row">
           <div class="form-group">
-            <label for="phoneNumber">Phone Number *</label>
+            <label for="occupation">Occupation</label>
             <input
-              type="tel"
-              id="phoneNumber"
-              name="phoneNumber"
-              [(ngModel)]="record.phoneNumber"
-              required
+              type="text"
+              id="occupation"
+              name="occupation"
+              [(ngModel)]="record.occupation"
               class="form-control"
+              placeholder="e.g. Software Engineer"
             />
           </div>
 
@@ -156,14 +104,14 @@
               name="alternatePhone"
               [(ngModel)]="record.alternatePhone"
               class="form-control"
+              placeholder="Secondary contact number"
             />
           </div>
         </div>
       </div>
 
-      <!-- Address Section -->
-      <div class="form-section">
-        <h3>Address</h3>
+      <div class="form-section" *ngIf="record.patientId !== 0">
+        <h3>📍 Medical Contact Address</h3>
         
         <div class="form-group">
           <label for="streetAddress">Street Address</label>
@@ -189,12 +137,12 @@
           </div>
 
           <div class="form-group">
-            <label for="county">County</label>
+            <label for="county">County/State</label>
             <input
               type="text"
               id="county"
               name="county"
-              [(ngModel)]="record.country"
+              [(ngModel)]="record.county"
               class="form-control"
             />
           </div>
@@ -212,27 +160,19 @@
         </div>
       </div>
 
-      <!-- Additional Information -->
-      <div class="form-section">
-        <h3>Additional Information</h3>
-        
-        <div class="form-group">
-          <label for="occupation">Occupation</label>
-          <input
-            type="text"
-            id="occupation"
-            name="occupation"
-            [(ngModel)]="record.occupation"
-            class="form-control"
-          />
-        </div>
-      </div>
-
       <div class="form-actions">
-        <button type="submit" class="btn btn-primary" [disabled]="!recordForm.valid">
-          Create Patient Record
+        <button 
+          type="submit" 
+          class="btn btn-primary" 
+          [disabled]="!recordForm.valid || record.patientId === 0"
+        >
+          Initialize Medical Record
         </button>
-        <button type="button" class="btn btn-secondary" (click)="router.navigate(['/psychologist/dashboard'])">
+        <button 
+          type="button" 
+          class="btn btn-secondary" 
+          (click)="router.navigate(['/psychologist/dashboard'])"
+        >
           Cancel
         </button>
       </div>

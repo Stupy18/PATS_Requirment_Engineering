@@ -14,6 +14,10 @@ export interface Patient {
   insuranceProvider?: string;
   insurancePolicyNumber?: string;
   registeredAt?: Date;
+  user?: {
+    email: string;
+    username: string;
+  };
 }
 
 // DTO for creating new patient

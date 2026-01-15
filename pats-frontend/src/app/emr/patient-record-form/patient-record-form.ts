@@ -17,11 +17,13 @@ import { Patient } from '../../models/patient.model';
 export class PatientRecordFormComponent implements OnInit {
   record: PatientRecord = {
     patientId: 0,
-    firstName: '',
-    lastName: '',
-    dateOfBirth: new Date(),
-    email: '',
-    phoneNumber: ''
+    cnp: '',
+    occupation: '',
+    alternatePhone: '',
+    streetAddress: '',
+    city: '',
+    county: '',
+    postalCode: ''
   };
 
   patients: Patient[] = [];
@@ -57,17 +59,10 @@ export class PatientRecordFormComponent implements OnInit {
   }
 
   onPatientSelect(): void {
-    this.selectedPatient = this.patients.find(p => p.id === this.record.patientId);
+    this.selectedPatient = this.patients.find(p => p.id === Number(this.record.patientId));
     if (this.selectedPatient) {
-      // Auto-fill form with patient data
-      this.record.firstName = this.selectedPatient.firstName;
-      this.record.lastName = this.selectedPatient.lastName;
-      this.record.dateOfBirth = this.selectedPatient.dateOfBirth || new Date();
-      this.record.gender = this.selectedPatient.gender;
-      this.record.phoneNumber = this.selectedPatient.phoneNumber || '';
       this.record.city = this.selectedPatient.city;
       this.record.postalCode = this.selectedPatient.postalCode;
-      this.record.country = this.selectedPatient.country;
     }
   }
 
@@ -86,11 +81,8 @@ export class PatientRecordFormComponent implements OnInit {
 
     this.patientRecordService.createPatientRecord(this.record).subscribe({
       next: (created) => {
-        console.log('Patient record created successfully:', created);
-        this.successMessage = `Patient record created successfully for ${this.record.firstName} ${this.record.lastName}!`;
-        setTimeout(() => {
-          this.router.navigate(['/psychologist/patients']);
-        }, 1500);
+        this.successMessage = `Patient record created successfully!`;
+        setTimeout(() => this.router.navigate(['/psychologist/patients']), 1500);
       },
       error: (error) => {
         console.error('Full error object:', error);

@@ -1,19 +1,20 @@
 package com.pats.pats_backend.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 
+/**
+ * Entity representing the Electronic Medical Record (EMR) for a patient.
+ * Core identity data (name, email, etc.) is managed via the 'patient' relationship 
+ * to maintain a single source of truth.
+ */
 @Entity
 @Table(name = "patient_records")
-@Data
+@Data // Lombok automatically generates getters, setters, toString, equals, and hashCode
 @NoArgsConstructor
 @AllArgsConstructor
 public class PatientRecord {
@@ -24,40 +25,18 @@ public class PatientRecord {
 
     @OneToOne
     @JoinColumn(name = "patient_id", nullable = false, unique = true)
-    private Patient patient;
-
-    // Demographics
-    @NotBlank
-    @Column(name = "first_name", nullable = false)
-    private String firstName;
-
-    @NotBlank
-    @Column(name = "last_name", nullable = false)
-    private String lastName;
-
-    @Column(name = "date_of_birth", nullable = false)
-    private LocalDate dateOfBirth;
-
-    @Column(name = "gender")
-    private String gender; // MALE, FEMALE, OTHER
+    private Patient patient; 
 
     @Column(name = "cnp", unique = true, length = 13)
-    private String cnp; // CNP
+    private String cnp;
 
-    // Contact Information
-    @Email
-    @NotBlank
-    @Column(nullable = false)
-    private String email;
-
-    @NotBlank
-    @Column(name = "phone_number", nullable = false)
-    private String phoneNumber;
+    @Column(name = "occupation")
+    private String occupation;
 
     @Column(name = "alternate_phone")
     private String alternatePhone;
 
-    // Address
+    // Address fields specifically for the Medical Record
     @Column(name = "street_address")
     private String streetAddress;
 
@@ -69,11 +48,7 @@ public class PatientRecord {
 
     @Column(name = "postal_code")
     private String postalCode;
-
-    // Additional info
-    @Column(name = "occupation")
-    private String occupation;
-
+    
     @Column(name = "is_active")
     private Boolean isActive = true;
 

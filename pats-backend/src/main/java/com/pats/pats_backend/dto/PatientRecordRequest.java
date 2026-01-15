@@ -1,36 +1,29 @@
 package com.pats.pats_backend.dto;
 
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
-import java.time.LocalDate;
-
+/**
+ * DTO for creating or updating a Patient Medical Record.
+ * Personal identity data (Name, Email, DOB) is excluded as it is 
+ * pulled automatically from the core Patient entity.
+ */
 @Data
 public class PatientRecordRequest {
-    private Long patientId;
-    
-    @NotBlank
-    private String firstName;
-    
-    @NotBlank
-    private String lastName;
-    
-    private LocalDate dateOfBirth;
-    private String gender;
+
+    // Unique identification number (CNP)
+    @NotBlank(message = "CNP is required")
+    @Size(min = 13, max = 13, message = "CNP must be exactly 13 characters")
     private String cnp;
-    
-    @Email
-    @NotBlank
-    private String email;
-    
-    @NotBlank
-    private String phoneNumber;
-    
+
+    // Professional information
+    private String occupation;
+
+    // Contact and Address details specific to the medical file
     private String alternatePhone;
     private String streetAddress;
     private String city;
     private String county;
     private String postalCode;
-    private String occupation;
 }

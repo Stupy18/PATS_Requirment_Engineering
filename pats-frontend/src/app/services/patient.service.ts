@@ -12,9 +12,12 @@ export class PatientService {
   constructor(private http: HttpClient) {}
 
   // Get all patients
-  getAllPatients(): Observable<Patient[]> {
-    return this.http.get<Patient[]>(this.apiUrl);
-  }
+getAllPatients(): Observable<Patient[]> {
+  const token = localStorage.getItem('token');
+  const headers = { 'Authorization': `Bearer ${token}` };
+  
+  return this.http.get<Patient[]>(this.apiUrl, { headers });
+}
 
   // Get patient by ID
   getPatientById(id: number): Observable<Patient> {
@@ -22,9 +25,14 @@ export class PatientService {
   }
 
   // Create new patient
-  createPatient(request: CreatePatientRequest): Observable<Patient> {
-    return this.http.post<Patient>(this.apiUrl, request);
-  }
+createPatient(request: CreatePatientRequest): Observable<Patient> {
+  const token = localStorage.getItem('token');
+  return this.http.post<Patient>(this.apiUrl, request, {
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  });
+}
 
   // Update patient
   updatePatient(id: number, patient: Patient): Observable<Patient> {

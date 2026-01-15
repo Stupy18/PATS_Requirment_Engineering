@@ -1,0 +1,31 @@
+<div class="notification-container">
+  <div 
+    *ngFor="let notification of notifications" 
+    class="notification"
+    [class.notification-info]="notification.type === 'info'"
+    [class.notification-success]="notification.type === 'success'"
+    [class.notification-warning]="notification.type === 'warning'"
+    [class.notification-error]="notification.type === 'error'"
+  >
+    <div class="notification-content">
+      <span class="notification-icon">{{ getIcon(notification.type) }}</span>
+      <p class="notification-message">{{ notification.message }}</p>
+    </div>
+    <div class="notification-actions">
+      <button 
+        *ngIf="notification.type === 'warning'" 
+        class="btn-action"
+        (click)="goToCheckin()"
+      >
+        Complete Check-in
+      </button>
+      <button 
+        class="btn-dismiss"
+        (click)="dismissNotification(notification.id)"
+        aria-label="Dismiss notification"
+      >
+        ✕
+      </button>
+    </div>
+  </div>
+</div>

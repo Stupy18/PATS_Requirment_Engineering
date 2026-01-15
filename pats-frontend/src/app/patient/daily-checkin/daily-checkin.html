@@ -1,0 +1,137 @@
+<div class="dashboard-layout">
+  <app-navbar></app-navbar>
+  <app-notification-banner></app-notification-banner>
+
+  <div class="main-content">
+    <div class="content-area">
+      <!-- Page Header -->
+      <header class="page-header">
+        <div>
+          <h1 class="page-title">Daily Emotional Check-in</h1>
+          <p class="page-subtitle">{{ getCurrentDate() }}</p>
+        </div>
+        <button class="btn-secondary" (click)="goBack()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+          </svg>
+          Back to Dashboard
+        </button>
+      </header>
+
+      <!-- Already submitted message -->
+      <div *ngIf="hasSubmittedToday" class="card already-submitted">
+        <div class="success-icon">✓</div>
+        <h2>Check-in Complete!</h2>
+        <p>You've already completed your emotional check-in for today.</p>
+        <button class="btn-primary" (click)="goBack()">Back to Dashboard</button>
+      </div>
+
+      <!-- Check-in form -->
+      <div *ngIf="!hasSubmittedToday" class="card checkin-form">
+      <!-- Success Message -->
+      <div *ngIf="successMessage" class="alert alert-success">
+        {{ successMessage }}
+      </div>
+
+      <!-- Error Message -->
+      <div *ngIf="errorMessage" class="alert alert-error">
+        {{ errorMessage }}
+      </div>
+
+      <!-- FR1.1: Emotional rating on scale 1-10 -->
+      <div class="rating-section">
+        <h2>How are you feeling today?</h2>
+        <p class="rating-label">Rate your emotional state from 1 to 10</p>
+        
+        <div class="emoji-display">
+          <span class="emoji">{{ getEmoji(emotionalRating) }}</span>
+          <span class="rating-value">{{ emotionalRating }}</span>
+        </div>
+
+        <div class="rating-description">
+          {{ ratingLabels[emotionalRating] }}
+        </div>
+
+        <!-- Rating slider -->
+        <div class="rating-slider-container">
+          <input 
+            type="range" 
+            min="1" 
+            max="10" 
+            [(ngModel)]="emotionalRating"
+            (input)="onRatingChange(+$any($event.target).value)"
+            class="rating-slider"
+            [disabled]="isSubmitting"
+          />
+          <div class="slider-labels">
+            <span>1</span>
+            <span>2</span>
+            <span>3</span>
+            <span>4</span>
+            <span>5</span>
+            <span>6</span>
+            <span>7</span>
+            <span>8</span>
+            <span>9</span>
+            <span>10</span>
+          </div>
+        </div>
+
+        <!-- Alternative: Number buttons -->
+        <div class="rating-buttons">
+          <button 
+            *ngFor="let rating of ratings" 
+            class="rating-btn"
+            [class.selected]="emotionalRating === rating"
+            (click)="onRatingChange(rating)"
+            [disabled]="isSubmitting"
+            type="button"
+          >
+            {{ rating }}
+          </button>
+        </div>
+      </div>
+
+      <!-- FR1.2: Optional text notes -->
+      <div class="notes-section">
+        <label for="notes">
+          <h3>Add notes (optional)</h3>
+          <p>Share any thoughts or details about your emotional state</p>
+        </label>
+        <textarea 
+          id="notes"
+          [(ngModel)]="notes"
+          placeholder="How was your day? What contributed to your emotional state?"
+          rows="6"
+          [disabled]="isSubmitting"
+          maxlength="1000"
+        ></textarea>
+        <div class="character-count">{{ notes.length }}/1000</div>
+      </div>
+
+      <!-- Submit button -->
+      <div class="submit-section">
+        <button 
+          class="btn-submit"
+          (click)="submitCheckin()"
+          [disabled]="isSubmitting"
+        >
+          <span *ngIf="!isSubmitting">Submit Check-in</span>
+          <span *ngIf="isSubmitting">Submitting...</span>
+        </button>
+        <button 
+          class="btn-cancel"
+          (click)="goBack()"
+          [disabled]="isSubmitting"
+        >
+          Cancel
+        </button>
+      </div>
+
+      <!-- FR1.3: Timestamp information -->
+      <div class="timestamp-info">
+        <p><small>Your check-in will be timestamped at the time of submission</small></p>
+      </div>
+    </div>
+  </div>
+</div>

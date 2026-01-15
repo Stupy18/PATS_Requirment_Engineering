@@ -1,5 +1,6 @@
 <div class="dashboard-layout">
   <app-navbar></app-navbar>
+  <app-notification-banner></app-notification-banner>
 
   <div class="main-layout">
     <!-- Sidebar Navigation -->
@@ -14,10 +15,12 @@
           </svg>
           Overview
         </a>
-        <a href="#" class="nav-link">
+        <a href="#" class="nav-link" routerLink="/patient/mood-history" routerLinkActive="active">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-            <polyline points="9 22 9 12 15 12 15 22"/>
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
+            <line x1="9" y1="9" x2="9.01" y2="9"/>
+            <line x1="15" y1="9" x2="15.01" y2="9"/>
           </svg>
           Mood Journal
         </a>
@@ -67,14 +70,37 @@
 
       <!-- Stats Grid -->
       <div class="metrics-grid">
-        <div class="metric-card">
+        <div class="metric-card" [class.completed]="hasCompletedTodayCheckin">
           <div class="metric-header">
             <span class="metric-label">Today's Check-in</span>
-            <span class="metric-status status-pending">Pending</span>
+            <span 
+              class="metric-status" 
+              [class.status-pending]="!hasCompletedTodayCheckin && !isLoadingMood"
+              [class.status-completed]="hasCompletedTodayCheckin"
+              [class.status-loading]="isLoadingMood"
+            >
+              <span *ngIf="isLoadingMood">Loading...</span>
+              <span *ngIf="!isLoadingMood && !hasCompletedTodayCheckin">Pending</span>
+              <span *ngIf="!isLoadingMood && hasCompletedTodayCheckin">✓ Complete</span>
+            </span>
           </div>
-          <div class="metric-value">—</div>
+          <div class="metric-value" *ngIf="!hasCompletedTodayCheckin && !isLoadingMood">—</div>
+          <div class="metric-value mood-display" *ngIf="hasCompletedTodayCheckin && todayMoodEntry">
+            <span class="mood-emoji">{{ getMoodEmoji(todayMoodEntry.emotionalRating) }}</span>
+            <span class="mood-rating">{{ todayMoodEntry.emotionalRating }}/10</span>
+          </div>
           <div class="metric-footer">
-            <span class="metric-change">Log your mood to track progress</span>
+            <span class="metric-change" *ngIf="!hasCompletedTodayCheckin && !isLoadingMood">Log your mood to track progress</span>
+            <button 
+              *ngIf="!hasCompletedTodayCheckin && !isLoadingMood" 
+              class="metric-action-btn"
+              (click)="goToDailyCheckin()"
+            >
+              Complete Check-in →
+            </button>
+            <span class="metric-change success" *ngIf="hasCompletedTodayCheckin">
+              Submitted at {{ todayMoodEntry?.entryTimestamp | date:'shortTime' }}
+            </span>
           </div>
         </div>
 
@@ -162,16 +188,21 @@
         </div>
         <div class="card-content">
           <div class="action-list">
-            <button class="action-list-item">
+            <button class="action-list-item" (click)="goToDailyCheckin()">
               <div class="action-icon">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
-                  <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                  <circle cx="12" cy="12" r="10"/>
+                  <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
+                  <line x1="9" y1="9" x2="9.01" y2="9"/>
+                  <line x1="15" y1="9" x2="15.01" y2="9"/>
                 </svg>
               </div>
               <div class="action-text">
-                <h3>Log Mood Entry</h3>
+                <h3>Daily Emotional Check-in</h3>
                 <p>Record your emotional state for today</p>
+              </div>
+              <div class="action-status" *ngIf="hasCompletedTodayCheckin">
+                <span class="badge-success">✓ Done</span>
               </div>
             </button>
 

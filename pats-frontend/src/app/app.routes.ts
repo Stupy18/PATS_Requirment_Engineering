@@ -2,6 +2,8 @@ import { Routes } from '@angular/router';
 import { LoginComponent } from './auth/login/login';
 import { RegisterComponent } from './auth/register/register';
 import { PatientDashboardComponent } from './patient/patient-dashboard/patient-dashboard';
+import { DailyCheckinComponent } from './patient/daily-checkin/daily-checkin';
+import { MoodHistoryComponent } from './patient/mood-history/mood-history';
 import { PsychologistDashboardComponent } from './psychologist/psychologist-dashboard/psychologist-dashboard';
 import { authGuard } from './guards/auth-guard';
 import { roleGuard } from './guards/role.guard';
@@ -24,6 +26,18 @@ export const routes: Routes = [
   {
     path: 'patient/dashboard',
     component: PatientDashboardComponent,
+    canActivate: [authGuard, roleGuard],
+    data: { role: 'PATIENT' }
+  },
+  {
+    path: 'patient/daily-checkin',
+    component: DailyCheckinComponent,
+    canActivate: [authGuard, roleGuard],
+    data: { role: 'PATIENT' }
+  },
+  {
+    path: 'patient/mood-history',
+    component: MoodHistoryComponent,
     canActivate: [authGuard, roleGuard],
     data: { role: 'PATIENT' }
   },

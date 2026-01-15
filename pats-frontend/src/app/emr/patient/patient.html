@@ -1,0 +1,262 @@
+<div class="container">
+  <div class="form-card">
+    <h2>🆕 Add New Patient</h2>
+    <p class="subtitle">Step 1: Create patient account and profile</p>
+
+    <div *ngIf="errorMessage" class="alert alert-error">
+      <strong>Error:</strong> {{ errorMessage }}
+    </div>
+
+    <div *ngIf="successMessage" class="alert alert-success">
+      {{ successMessage }}
+    </div>
+
+    <form (ngSubmit)="onSubmit()" #patientForm="ngForm">
+      <!-- Account Information -->
+      <div class="form-section">
+        <h3>Account Information</h3>
+        
+        <div class="form-group">
+          <label for="username">Username *</label>
+          <div class="input-with-button">
+            <input
+              type="text"
+              id="username"
+              name="username"
+              [(ngModel)]="patientData.username"
+              required
+              class="form-control"
+              placeholder="john.doe"
+            />
+            <button type="button" class="btn-helper" (click)="generateUsername()">
+              Auto-generate
+            </button>
+          </div>
+          <small class="form-help">Patient will use this to login</small>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email *</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            [(ngModel)]="patientData.email"
+            required
+            class="form-control"
+            placeholder="john.doe@example.com"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="password">Temporary Password *</label>
+          <div class="input-with-button">
+            <input
+              type="text"
+              id="password"
+              name="password"
+              [(ngModel)]="patientData.password"
+              required
+              class="form-control"
+              placeholder="Temporary password"
+            />
+            <button type="button" class="btn-helper" (click)="generatePassword()">
+              Generate
+            </button>
+          </div>
+          <small class="form-help">⚠️ Give this password to the patient. They should change it on first login.</small>
+        </div>
+      </div>
+
+      <!-- Personal Information -->
+      <div class="form-section">
+        <h3>Personal Information</h3>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="firstName">First Name *</label>
+            <input
+              type="text"
+              id="firstName"
+              name="firstName"
+              [(ngModel)]="patientData.firstName"
+              required
+              class="form-control"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="lastName">Last Name *</label>
+            <input
+              type="text"
+              id="lastName"
+              name="lastName"
+              [(ngModel)]="patientData.lastName"
+              required
+              class="form-control"
+            />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="dateOfBirth">Date of Birth</label>
+            <input
+              type="date"
+              id="dateOfBirth"
+              name="dateOfBirth"
+              [(ngModel)]="patientData.dateOfBirth"
+              class="form-control"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="gender">Gender</label>
+            <select
+              id="gender"
+              name="gender"
+              [(ngModel)]="patientData.gender"
+              class="form-control"
+            >
+              <option value="">Select...</option>
+              <option value="MALE">Male</option>
+              <option value="FEMALE">Female</option>
+              <option value="OTHER">Other</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="phoneNumber">Phone Number *</label>
+          <input
+            type="tel"
+            id="phoneNumber"
+            name="phoneNumber"
+            [(ngModel)]="patientData.phoneNumber"
+            required
+            class="form-control"
+            placeholder="+40 123 456 789"
+          />
+        </div>
+      </div>
+
+      <!-- Address (Optional) -->
+      <div class="form-section">
+        <h3>Address (Optional)</h3>
+        
+        <div class="form-group">
+          <label for="address">Street Address</label>
+          <input
+            type="text"
+            id="address"
+            name="address"
+            [(ngModel)]="patientData.address"
+            class="form-control"
+          />
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="city">City</label>
+            <input
+              type="text"
+              id="city"
+              name="city"
+              [(ngModel)]="patientData.city"
+              class="form-control"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="postalCode">Postal Code</label>
+            <input
+              type="text"
+              id="postalCode"
+              name="postalCode"
+              [(ngModel)]="patientData.postalCode"
+              class="form-control"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="country">Country</label>
+            <input
+              type="text"
+              id="country"
+              name="country"
+              [(ngModel)]="patientData.country"
+              class="form-control"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- Medical Info (Optional) -->
+      <div class="form-section">
+        <h3>Medical Information (Optional)</h3>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="bloodType">Blood Type</label>
+            <select
+              id="bloodType"
+              name="bloodType"
+              [(ngModel)]="patientData.bloodType"
+              class="form-control"
+            >
+              <option value="">Select...</option>
+              <option value="A+">A+</option>
+              <option value="A-">A-</option>
+              <option value="B+">B+</option>
+              <option value="B-">B-</option>
+              <option value="AB+">AB+</option>
+              <option value="AB-">AB-</option>
+              <option value="O+">O+</option>
+              <option value="O-">O-</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="insuranceProvider">Insurance Provider</label>
+            <input
+              type="text"
+              id="insuranceProvider"
+              name="insuranceProvider"
+              [(ngModel)]="patientData.insuranceProvider"
+              class="form-control"
+            />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="insurancePolicyNumber">Insurance Policy Number</label>
+          <input
+            type="text"
+            id="insurancePolicyNumber"
+            name="insurancePolicyNumber"
+            [(ngModel)]="patientData.insurancePolicyNumber"
+            class="form-control"
+          />
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button 
+          type="submit" 
+          class="btn btn-primary" 
+          [disabled]="!patientForm.valid || isSubmitting"
+        >
+          {{ isSubmitting ? 'Creating...' : '✓ Create Patient' }}
+        </button>
+        <button 
+          type="button" 
+          class="btn btn-secondary" 
+          (click)="router.navigate(['/psychologist/dashboard'])"
+          [disabled]="isSubmitting"
+        >
+          Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

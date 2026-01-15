@@ -1,0 +1,183 @@
+<div class="emergency-contacts">
+  <div class="header">
+    <h3>Emergency Contacts - FR17.6</h3>
+    <button class="btn btn-primary" (click)="toggleAddForm()">
+      {{ showAddForm ? 'Cancel' : '+ Add Emergency Contact' }}
+    </button>
+  </div>
+
+  <div *ngIf="errorMessage" class="alert alert-error">
+    {{ errorMessage }}
+  </div>
+
+  <div *ngIf="successMessage" class="alert alert-success">
+    {{ successMessage }}
+  </div>
+
+  <!-- Add Contact Form -->
+  <div *ngIf="showAddForm" class="contact-form">
+    <h4>New Emergency Contact</h4>
+    <form (ngSubmit)="onSubmit()" #contactForm="ngForm">
+      <div class="form-row">
+        <div class="form-group">
+          <label>First Name *</label>
+          <input
+            type="text"
+            name="firstName"
+            [(ngModel)]="newContact.firstName"
+            required
+            class="form-control"
+          />
+        </div>
+
+        <div class="form-group">
+          <label>Last Name *</label>
+          <input
+            type="text"
+            name="lastName"
+            [(ngModel)]="newContact.lastName"
+            required
+            class="form-control"
+          />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Relationship *</label>
+          <input
+            type="text"
+            name="relationship"
+            [(ngModel)]="newContact.relationship"
+            placeholder="e.g., Spouse, Parent, Sibling"
+            required
+            class="form-control"
+          />
+        </div>
+
+        <div class="form-group">
+          <label>Phone Number *</label>
+          <input
+            type="tel"
+            name="phoneNumber"
+            [(ngModel)]="newContact.phoneNumber"
+            required
+            class="form-control"
+          />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Alternate Phone</label>
+          <input
+            type="tel"
+            name="alternatePhone"
+            [(ngModel)]="newContact.alternatePhone"
+            class="form-control"
+          />
+        </div>
+
+        <div class="form-group">
+          <label>Email</label>
+          <input
+            type="email"
+            name="email"
+            [(ngModel)]="newContact.email"
+            class="form-control"
+          />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Address</label>
+        <input
+          type="text"
+          name="address"
+          [(ngModel)]="newContact.address"
+          class="form-control"
+        />
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Priority (1 = highest)</label>
+          <input
+            type="number"
+            name="priority"
+            [(ngModel)]="newContact.priority"
+            min="1"
+            max="10"
+            class="form-control"
+          />
+        </div>
+
+        <div class="form-group checkbox-group">
+          <label>
+            <input
+              type="checkbox"
+              name="isPrimary"
+              [(ngModel)]="newContact.isPrimary"
+            />
+            Primary Contact
+          </label>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-success" [disabled]="!contactForm.valid">
+          Save Contact
+        </button>
+        <button type="button" class="btn btn-secondary" (click)="toggleAddForm()">
+          Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Contacts List -->
+  <div class="contacts-list">
+    <div *ngIf="contacts.length === 0" class="empty-state">
+      <p>No emergency contacts added yet.</p>
+    </div>
+
+    <div *ngFor="let contact of contacts" class="contact-card">
+      <div class="contact-header">
+        <div class="contact-name">
+          <h4>{{ contact.firstName }} {{ contact.lastName }}</h4>
+          <span class="badge" [class.badge-primary]="contact.isPrimary">
+            {{ contact.isPrimary ? 'Primary' : contact.relationship }}
+          </span>
+          <span class="badge badge-priority" [ngClass]="'badge-' + getPriorityBadge(contact.priority)">
+            Priority {{ contact.priority }}
+          </span>
+        </div>
+        <button class="btn btn-delete" (click)="deleteContact(contact.id!)">
+          Delete
+        </button>
+      </div>
+
+      <div class="contact-details">
+        <div class="detail-item">
+          <span class="label">Phone:</span>
+          <span class="value">{{ contact.phoneNumber }}</span>
+        </div>
+
+        <div class="detail-item" *ngIf="contact.alternatePhone">
+          <span class="label">Alt. Phone:</span>
+          <span class="value">{{ contact.alternatePhone }}</span>
+        </div>
+
+        <div class="detail-item" *ngIf="contact.email">
+          <span class="label">Email:</span>
+          <span class="value">{{ contact.email }}</span>
+        </div>
+
+        <div class="detail-item" *ngIf="contact.address">
+          <span class="label">Address:</span>
+          <span class="value">{{ contact.address }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

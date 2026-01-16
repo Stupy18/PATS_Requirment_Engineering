@@ -25,12 +25,12 @@ public class PatientRecordController {
     @PostMapping("/records/patient/{patientId}")
     @PreAuthorize("hasRole('PSYCHOLOGIST')")
     public ResponseEntity<PatientRecord> createRecord(
-        @PathVariable Long patientId,
-        @Valid @RequestBody PatientRecordRequest request) {
-    
-    return ResponseEntity.status(HttpStatus.CREATED)
-            .body(service.createPatientRecord(patientId, request));
-}
+            @PathVariable Long patientId,
+            @Valid @RequestBody PatientRecordRequest request) {
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(service.createPatientRecord(patientId, request));
+    }
 
     @GetMapping("/records/{id}")
     @PreAuthorize("hasAnyRole('PSYCHOLOGIST', 'PATIENT')")

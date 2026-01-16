@@ -12,6 +12,13 @@ import { authGuard } from './guards/auth-guard';
 import { roleGuard } from './guards/role.guard';
 import { redirectGuard } from './guards/redirect.guard';
 
+// EMR Components
+import { AddPatientComponent } from './emr/patient/patient';
+import { PatientListComponent } from './emr/patient-list/patient-list';
+import { PatientRecordFormComponent } from './emr/patient-record-form/patient-record-form';
+import { EmergencyContactsComponent } from './emr/emergency-contacts/emergency-contacts';
+import { AuditLogViewerComponent } from './emr/audit-log-viewer/audit-log-viewer';
+
 export const routes: Routes = [
   {
     path: '',
@@ -50,6 +57,39 @@ export const routes: Routes = [
     canActivate: [authGuard, roleGuard],
     data: { role: 'PSYCHOLOGIST' }
   },
+  
+  // === PATIENT MANAGEMENT & EMR ROUTES ===
+  {
+    path: 'psychologist/patients/new',
+    component: AddPatientComponent,
+    canActivate: [authGuard, roleGuard],
+    data: { role: 'PSYCHOLOGIST' }
+  },
+  {
+    path: 'psychologist/patients',
+    component: PatientListComponent,
+    canActivate: [authGuard, roleGuard],
+    data: { role: 'PSYCHOLOGIST' }
+  },
+  {
+    path: 'psychologist/patients/:id/record',
+    component: PatientRecordFormComponent,
+    canActivate: [authGuard, roleGuard],
+    data: { role: 'PSYCHOLOGIST' }
+  },
+  {
+    path: 'psychologist/patients/:id/emergency-contacts',
+    component: EmergencyContactsComponent,
+    canActivate: [authGuard, roleGuard],
+    data: { role: 'PSYCHOLOGIST' }
+  },
+  {
+    path: 'psychologist/patients/:id/audit',
+    component: AuditLogViewerComponent,
+    canActivate: [authGuard, roleGuard],
+    data: { role: 'PSYCHOLOGIST' }
+  },
+  
   {
     path: 'appointments/book',
     component: BookAppointmentComponent,

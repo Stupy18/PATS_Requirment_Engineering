@@ -1,0 +1,110 @@
+<div class="container">
+  <div class="header">
+    <div>
+      <h2>📋 Patient List</h2>
+      <p class="subtitle">Manage your patients</p>
+    </div>
+    <button class="btn btn-primary" routerLink="/psychologist/patients/new">
+      + Add New Patient
+    </button>
+  </div>
+
+  <div *ngIf="errorMessage" class="alert alert-error">
+    {{ errorMessage }}
+  </div>
+
+  <!-- Search Bar -->
+  <div class="search-section">
+    <div class="search-bar">
+      <input
+        type="text"
+        [(ngModel)]="searchTerm"
+        (input)="onSearch()"
+        placeholder="Search by name..."
+        class="search-input"
+      />
+      <button class="btn-refresh" (click)="loadPatients()" [disabled]="loading">
+        🔄
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading-state">
+    <div class="spinner"></div>
+    <p>Loading patients...</p>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="!loading && filteredPatients.length === 0" class="empty-state">
+    <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+      <circle cx="9" cy="7" r="4"/>
+      <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+      <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+    </svg>
+    <p *ngIf="searchTerm">No patients found matching "{{ searchTerm }}"</p>
+    <p *ngIf="!searchTerm">No patients added yet</p>
+    <button class="btn btn-primary" routerLink="/psychologist/patients/new">
+      Add Your First Patient
+    </button>
+  </div>
+
+  <!-- Patient Cards -->
+  <div *ngIf="!loading && filteredPatients.length > 0" class="patient-grid">
+    <div *ngFor="let patient of filteredPatients" class="patient-card">
+      <div class="patient-header">
+        <div class="patient-avatar">
+          {{ patient.firstName.charAt(0) }}{{ patient.lastName.charAt(0) }}
+        </div>
+        <div class="patient-info">
+          <h3>{{ patient.firstName }} {{ patient.lastName }}</h3>
+          <span class="patient-id">ID: {{ patient.id }}</span>
+        </div>
+      </div>
+
+      <div class="patient-details">
+        <div class="detail-row" *ngIf="patient.dateOfBirth">
+          <span class="label">Age:</span>
+          <span class="value">{{ getPatientAge(patient.dateOfBirth) }}</span>
+        </div>
+
+        <div class="detail-row" *ngIf="patient.gender">
+          <span class="label">Gender:</span>
+          <span class="value">{{ patient.gender }}</span>
+        </div>
+
+        <div class="detail-row" *ngIf="patient.phoneNumber">
+          <span class="label">Phone:</span>
+          <span class="value">{{ patient.phoneNumber }}</span>
+        </div>
+
+        <div class="detail-row" *ngIf="patient.city">
+          <span class="label">City:</span>
+          <span class="value">{{ patient.city }}</span>
+        </div>
+      </div>
+
+      <div class="patient-actions">
+        <button 
+          class="btn btn-action btn-primary"
+          (click)="createPatientRecord(patient.id!)"
+          title="Create/View EMR"
+        >
+          📋 EMR
+        </button>
+        <button 
+          class="btn btn-action btn-secondary"
+          (click)="viewEmergencyContacts(patient.id!)"
+          title="Emergency Contacts"
+        >
+          🚨 Contacts
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="!loading && filteredPatients.length > 0" class="summary">
+    <p>Showing {{ filteredPatients.length }} of {{ patients.length }} patients</p>
+  </div>
+</div>

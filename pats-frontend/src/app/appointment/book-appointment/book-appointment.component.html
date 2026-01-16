@@ -6,56 +6,101 @@
       <h2>Book an Appointment</h2>
 
       <!-- Success/Error Messages -->
-      <div *ngIf="successMessage" class="alert alert-success">{{ successMessage }}</div>
-      <div *ngIf="errorMessage" class="alert alert-error">{{ errorMessage }}</div>
+      <div *ngIf="successMessage" class="alert alert-success">
+        {{ successMessage }}
+      </div>
+
+      <div *ngIf="errorMessage" class="alert alert-error">
+        {{ errorMessage }}
+      </div>
 
       <!-- Booking Form -->
       <form [formGroup]="bookingForm" class="booking-form">
+
+        <!-- Psychologist -->
         <div class="form-group">
           <label for="psychologistId">Select Psychologist *</label>
-          <select id="psychologistId" formControlName="psychologistId" required>
+          <select
+            id="psychologistId"
+            formControlName="psychologistId"
+            required
+          >
             <option value="">Choose a psychologist</option>
-            <option *ngFor="let psych of psychologists" [value]="psych.id">
+            <option *ngFor="let psych of psychologists" [ngValue]="psych.id">
               {{ psych.firstName }} {{ psych.lastName }}
             </option>
           </select>
         </div>
 
+        <!-- Date -->
         <div class="form-group">
           <label for="appointmentDate">Appointment Date *</label>
-          <input id="appointmentDate" type="date" formControlName="appointmentDate" required/>
+          <input
+            id="appointmentDate"
+            type="date"
+            formControlName="appointmentDate"
+            required
+          />
         </div>
 
+        <!-- Time -->
         <div class="form-group">
           <label for="appointmentTime">Appointment Time *</label>
-          <input id="appointmentTime" type="time" formControlName="appointmentTime" required/>
+          <input
+            id="appointmentTime"
+            type="time"
+            formControlName="appointmentTime"
+            required
+          />
         </div>
 
+        <!-- Type -->
         <div class="form-group">
           <label for="type">Appointment Type *</label>
           <select id="type" formControlName="type" required>
-            <option *ngFor="let type of appointmentTypes" [value]="type">{{ type }}</option>
+            <option *ngFor="let type of appointmentTypes" [value]="type">
+              {{ type }}
+            </option>
           </select>
         </div>
 
+        <!-- Duration -->
         <div class="form-group">
           <label for="durationMinutes">Duration (minutes) *</label>
           <select id="durationMinutes" formControlName="durationMinutes" required>
-            <option *ngFor="let duration of durations" [value]="duration">{{ duration }}</option>
+            <option *ngFor="let duration of durations" [value]="duration">
+              {{ duration }}
+            </option>
           </select>
         </div>
 
+        <!-- Notes -->
         <div class="form-group">
           <label for="notes">Additional Notes</label>
-          <textarea id="notes" formControlName="notes" rows="3"></textarea>
+          <textarea
+            id="notes"
+            formControlName="notes"
+            rows="3"
+          ></textarea>
         </div>
 
+        <!-- Actions -->
         <div class="form-actions">
-          <button type="button" (click)="searchAvailableSlots()" class="btn btn-secondary" [disabled]="loading">
+          <button
+            type="button"
+            (click)="searchAvailableSlots()"
+            class="btn btn-secondary"
+            [disabled]="loading"
+          >
             {{ loading ? 'Searching...' : 'Search Available Slots' }}
           </button>
-          <button type="button" (click)="bookAppointment()" class="btn btn-primary"
-                  [disabled]="bookingForm.invalid || loading">
+
+          <button
+            type="button"
+            (click)="bookAppointment()"
+            class="btn btn-primary"
+            [disabled]="bookingForm.invalid || loading"
+          >
             {{ loading ? 'Booking...' : 'Confirm Booking' }}
           </button>
         </div>
@@ -66,13 +111,13 @@
         <h3>Available Slots</h3>
         <div class="slots-grid">
           <div *ngFor="let slot of availableSlots" class="slot-card">
-            <p><strong>Date:</strong> {{ slot.appointmentDateTime | date: 'MMM dd, yyyy' }}</p>
-            <p><strong>Time:</strong> {{ slot.appointmentDateTime | date: 'HH:mm' }}</p>
+            <p><strong>Date:</strong> {{ slot.appointmentDateTime | date:'MMM dd, yyyy' }}</p>
+            <p><strong>Time:</strong> {{ slot.appointmentDateTime | date:'HH:mm' }}</p>
             <p><strong>Duration:</strong> {{ slot.durationMinutes }} minutes</p>
           </div>
         </div>
       </div>
+
     </div>
   </div>
 </div>
-

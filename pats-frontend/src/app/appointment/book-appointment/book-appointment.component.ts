@@ -5,6 +5,7 @@ import { AppointmentService } from '../../services/appointment.service';
 import { AvailabilityService } from '../../services/availability.service';
 import { Appointment, Availability } from '../../models/appointment.model';
 import {NavbarComponent} from "../../shared/navbar/navbar";
+import {PsychologistService} from '../../services/psychologist.service';
 
 @Component({
   selector: 'app-book-appointment',
@@ -17,7 +18,7 @@ export class BookAppointmentComponent implements OnInit {
 
   bookingForm: FormGroup;
   availableSlots: Appointment[] = [];
-  psychologists: any[] = [];
+  psychologists: any[] = ["Stupy"];
   successMessage: string = '';
   errorMessage: string = '';
   loading: boolean = false;
@@ -29,9 +30,11 @@ export class BookAppointmentComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private appointmentService: AppointmentService,
-    private availabilityService: AvailabilityService
+    private availabilityService: AvailabilityService,
+    private psychologistService: PsychologistService
   ) {
-    this.bookingForm = this.formBuilder.group({
+
+  this.bookingForm = this.formBuilder.group({
       psychologistId: ['', Validators.required],
       appointmentDate: ['', Validators.required],
       appointmentTime: ['', Validators.required],
@@ -42,9 +45,12 @@ export class BookAppointmentComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Load psychologists list
-    // This would typically come from an API call
+    this.psychologistService.getAllPsychologists().subscribe({
+      next: (data) => this.psychologists = data,
+      error: () => this.errorMessage = 'Failed to load psychologists'
+    });
   }
+
 
   /**
    * FR9.2 - Search available slots

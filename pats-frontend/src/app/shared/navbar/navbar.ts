@@ -1,12 +1,13 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { User } from '../../models/user.model';
-import {AuthService} from '../../auth/auth';
+import { AuthService } from '../../auth/auth';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './navbar.html',
   styleUrls: ['./navbar.scss']
 })
@@ -27,5 +28,9 @@ export class NavbarComponent implements OnInit {
 
   getRoleDisplay(): string {
     return this.currentUser?.role === 'PATIENT' ? 'Patient Account' : 'Psychologist Account';
+  }
+
+  getDashboardRoute(): string {
+    return this.currentUser?.role === 'PATIENT' ? '/patient/dashboard' : '/psychologist/dashboard';
   }
 }

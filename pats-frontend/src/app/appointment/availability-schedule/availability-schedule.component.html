@@ -1,71 +1,78 @@
-<div class="availability-container">
-  <h2>Manage Your Availability Schedule</h2>
+<div class="dashboard-container">
+  <app-navbar></app-navbar>
 
-  <!-- Success/Error Messages -->
-  <div *ngIf="successMessage" class="alert alert-success">{{ successMessage }}</div>
-  <div *ngIf="errorMessage" class="alert alert-error">{{ errorMessage }}</div>
+  <div class="dashboard-layout">
+    <div class="availability-container">
+      <h2>Manage Your Availability Schedule</h2>
 
-  <!-- Add Availability Form -->
-  <form [formGroup]="availabilityForm" (ngSubmit)="createAvailability()" class="availability-form">
-    <div class="form-group">
-      <label for="dayOfWeek">Day of Week *</label>
-      <select id="dayOfWeek" formControlName="dayOfWeek" required>
-        <option value="">Select a day</option>
-        <option *ngFor="let day of daysOfWeek" [value]="day">{{ day }}</option>
-      </select>
-    </div>
+      <!-- Success/Error Messages -->
+      <div *ngIf="successMessage" class="alert alert-success">{{ successMessage }}</div>
+      <div *ngIf="errorMessage" class="alert alert-error">{{ errorMessage }}</div>
 
-    <div class="form-group">
-      <label for="startTime">Start Time *</label>
-      <input id="startTime" type="time" formControlName="startTime" required />
-    </div>
+      <!-- Add Availability Form -->
+      <form [formGroup]="availabilityForm" (ngSubmit)="createAvailability()" class="availability-form">
+        <div class="form-group">
+          <label for="dayOfWeek">Day of Week *</label>
+          <select id="dayOfWeek" formControlName="dayOfWeek" required>
+            <option value="">Select a day</option>
+            <option *ngFor="let day of daysOfWeek" [value]="day">{{ day }}</option>
+          </select>
+        </div>
 
-    <div class="form-group">
-      <label for="endTime">End Time *</label>
-      <input id="endTime" type="time" formControlName="endTime" required />
-    </div>
+        <div class="form-group">
+          <label for="startTime">Start Time *</label>
+          <input id="startTime" type="time" formControlName="startTime" required/>
+        </div>
 
-    <div class="form-group">
-      <label for="notes">Notes</label>
-      <textarea id="notes" formControlName="notes" rows="3"></textarea>
-    </div>
+        <div class="form-group">
+          <label for="endTime">End Time *</label>
+          <input id="endTime" type="time" formControlName="endTime" required/>
+        </div>
 
-    <button type="submit" [disabled]="availabilityForm.invalid" class="btn btn-primary">
-      Add Availability
-    </button>
-  </form>
+        <div class="form-group">
+          <label for="notes">Notes</label>
+          <textarea id="notes" formControlName="notes" rows="3"></textarea>
+        </div>
 
-  <!-- Current Availabilities -->
-  <div class="availabilities-list">
-    <h3>Current Schedule</h3>
-    <div *ngIf="availabilities.length === 0" class="no-data">
-      No availabilities set yet
-    </div>
-    <div *ngIf="availabilities.length > 0" class="table-responsive">
-      <table class="availability-table">
-        <thead>
-          <tr>
-            <th>Day</th>
-            <th>Start Time</th>
-            <th>End Time</th>
-            <th>Notes</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let availability of availabilities">
-            <td>{{ availability.dayOfWeek }}</td>
-            <td>{{ availability.startTime }}</td>
-            <td>{{ availability.endTime }}</td>
-            <td>{{ availability.notes || '-' }}</td>
-            <td>
-              <button (click)="deleteAvailability(availability.id)" class="btn btn-delete btn-sm">
-                Delete
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+        <button type="submit" [disabled]="availabilityForm.invalid" class="btn btn-primary">
+          Add Availability
+        </button>
+      </form>
+
+      <!-- Current Availabilities -->
+      <div class="availabilities-list">
+        <h3>Current Schedule</h3>
+        <div *ngIf="availabilities.length === 0" class="no-data">
+          No availabilities set yet
+        </div>
+        <div *ngIf="availabilities.length > 0" class="table-responsive">
+          <table class="availability-table">
+            <thead>
+            <tr>
+              <th>Day</th>
+              <th>Start Time</th>
+              <th>End Time</th>
+              <th>Notes</th>
+              <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let availability of availabilities">
+              <td>{{ availability.dayOfWeek }}</td>
+              <td>{{ availability.startTime }}</td>
+              <td>{{ availability.endTime }}</td>
+              <td>{{ availability.notes || '-' }}</td>
+              <td>
+                <button (click)="deleteAvailability(availability.id)" class="btn btn-delete btn-sm">
+                  Delete
+                </button>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   </div>
 </div>
+

@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { NavbarComponent } from '../../shared/navbar/navbar';
+import { AuthService } from '../../auth/auth';
 import { User } from '../../models/user.model';
-import {NavbarComponent} from '../../shared/navbar/navbar';
-import {AuthService} from '../../auth/auth';
 
 @Component({
   selector: 'app-psychologist-dashboard',
@@ -23,13 +23,24 @@ export class PsychologistDashboardComponent implements OnInit {
     });
   }
 
+  /**
+   * Get current date string
+   */
   getCurrentDate(): string {
-    const options: Intl.DateTimeFormatOptions = {
+    return new Date().toLocaleDateString('en-US', {
       weekday: 'long',
       year: 'numeric',
       month: 'long',
       day: 'numeric'
-    };
-    return new Date().toLocaleDateString('en-US', options);
+    });
+  }
+
+  /**
+   * Dummy method for non-implemented features - prevents navigation
+   */
+  doNothing(event: Event): void {
+    event.preventDefault();
+    event.stopPropagation();
+    // Could add a toast notification here: "Feature coming soon!"
   }
 }

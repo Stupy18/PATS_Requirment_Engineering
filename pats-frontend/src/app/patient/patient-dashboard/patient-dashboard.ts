@@ -26,7 +26,7 @@ export class PatientDashboardComponent implements OnInit {
     private authService: AuthService,
     private moodEntryService: MoodEntryService,
     private notificationService: NotificationService,
-    private router: Router
+    public router: Router
   ) {}
 
   ngOnInit(): void {
@@ -47,12 +47,12 @@ export class PatientDashboardComponent implements OnInit {
         next: (entries) => {
           this.isLoadingMood = false;
           this.hasCompletedTodayCheckin = this.moodEntryService.hasCompletedTodayCheckin(entries);
-          
+
           if (this.hasCompletedTodayCheckin) {
             // Find today's entry
             const today = new Date();
             today.setHours(0, 0, 0, 0);
-            
+
             this.todayMoodEntry = entries.find(entry => {
               const entryDate = new Date(entry.entryTimestamp);
               entryDate.setHours(0, 0, 0, 0);
@@ -72,22 +72,15 @@ export class PatientDashboardComponent implements OnInit {
   }
 
   /**
-   * FR1.4: Check and show reminder notification if it's past 8:00 PM
-   * and patient hasn't completed today's check-in
+   * FR1.4: Show reminder notification if it's after 8 PM and check-in not completed
    */
   private checkReminderNotification(): void {
-    if (this.notificationService.shouldShowReminderToday()) {
-      this.notificationService.showCheckinReminder();
-      this.notificationService.markReminderShown();
-    }
-  }
+    const now = new Date();
+    const hour = now.getHours();
 
-  /**
-   * Manual trigger for testing reminder notification
-   * Can be removed in production
-   */
-  testReminder(): void {
-    this.notificationService.showCheckinReminder();
+    if (hour >= 20) { // 8:00 PM or later
+      this.notificationService.showCheckinReminder();
+    }
   }
 
   /**
@@ -98,30 +91,34 @@ export class PatientDashboardComponent implements OnInit {
   }
 
   /**
-   * Navigate to mood history page
+   * Get emoji representation of mood rating
    */
-  goToMoodHistory(): void {
-    this.router.navigate(['/patient/mood-history']);
+  getMoodEmoji(rating: number): string {
+    if (rating >= 9) return '😄';
+    if (rating >= 7) return '🙂';
+    if (rating >= 5) return '😐';
+    if (rating >= 3) return '😟';
+    return '😢';
   }
 
   /**
-   * Get emoji for mood rating
+   * Get current date string
    */
-  getMoodEmoji(rating: number): string {
-    if (rating <= 2) return '😢';
-    if (rating <= 4) return '😟';
-    if (rating <= 6) return '😐';
-    if (rating <= 8) return '🙂';
-    return '😄';
-  }
-
   getCurrentDate(): string {
-    const options: Intl.DateTimeFormatOptions = {
+    return new Date().toLocaleDateString('en-US', {
       weekday: 'long',
       year: 'numeric',
       month: 'long',
       day: 'numeric'
-    };
-    return new Date().toLocaleDateString('en-US', options);
+    });
+  }
+
+  /**
+   * Dummy method for non-implemented features - prevents navigation
+   */
+  doNothing(event: Event): void {
+    event.preventDefault();
+    event.stopPropagation();
+    // Could add a toast notification here: "Feature coming soon!"
   }
 }

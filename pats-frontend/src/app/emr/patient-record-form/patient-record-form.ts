@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { PatientRecordService } from '../../services/patient-record.service';
 import { PatientService } from '../../services/patient.service';
 import { PatientRecord } from '../../models/patient-record.model';
@@ -15,6 +15,11 @@ import { Patient } from '../../models/patient.model';
   styleUrls: ['./patient-record-form.scss']
 })
 export class PatientRecordFormComponent implements OnInit {
+  patientId!: number;
+  recordId?: number;
+  isEditMode = false;
+  isLoading = true;
+
   record: PatientRecord = {
     patientId: 0,
     cnp: '',
@@ -26,74 +31,124 @@ export class PatientRecordFormComponent implements OnInit {
     postalCode: ''
   };
 
-  patients: Patient[] = [];
   selectedPatient?: Patient;
-  loadingPatients = false;
-
+  
   errorMessage: string = '';
   successMessage: string = '';
-  detailedError: string = '';
 
   constructor(
+    private route: ActivatedRoute,
     private patientRecordService: PatientRecordService,
     private patientService: PatientService,
     public router: Router
   ) {}
 
   ngOnInit(): void {
-    this.loadPatients();
+    this.route.params.subscribe(params => {
+      this.patientId = +params['id'];
+      
+      if (!this.patientId) {
+        this.errorMessage = 'Patient ID is missing!';
+        this.isLoading = false;
+        return;
+      }
+
+      console.log('Patient ID from URL:', this.patientId);
+      this.record.patientId = this.patientId;
+      
+      this.loadPatientData();
+      this.loadExistingRecord();
+    });
   }
 
-  loadPatients(): void {
-    this.loadingPatients = true;
-    this.patientService.getAllPatients().subscribe({
-      next: (patients) => {
-        this.patients = patients;
-        this.loadingPatients = false;
+  loadPatientData(): void {
+    this.patientService.getPatientById(this.patientId).subscribe({
+      next: (patient) => {
+        console.log('Patient data loaded:', patient);
+        this.selectedPatient = patient;
+        
+        if (!this.isEditMode && !this.record.city) {
+          this.record.city = patient.city;
+          this.record.postalCode = patient.postalCode;
+        }
       },
       error: (error) => {
-        console.error('Error loading patients:', error);
-        this.loadingPatients = false;
+        console.error('Error loading patient:', error);
+        this.errorMessage = 'Failed to load patient information';
+        this.isLoading = false;
       }
     });
   }
 
-  onPatientSelect(): void {
-    this.selectedPatient = this.patients.find(p => p.id === Number(this.record.patientId));
-    if (this.selectedPatient) {
-      this.record.city = this.selectedPatient.city;
-      this.record.postalCode = this.selectedPatient.postalCode;
-    }
+  loadExistingRecord(): void {
+    this.patientRecordService.getPatientRecordByPatientId(this.patientId).subscribe({
+      next: (existingRecord) => {
+        console.log('Existing medical record found:', existingRecord);
+        
+        this.recordId = existingRecord.id;
+        this.record = { ...existingRecord };
+        this.isEditMode = true;
+        this.isLoading = false;
+        
+        this.successMessage = '✓ Medical record loaded. Update information below.';
+      },
+      error: (error) => {
+        console.log('No existing record found:', error);
+        
+        if (error.status === 404) {
+          this.isEditMode = false;
+          this.isLoading = false;
+        } else {
+          this.errorMessage = 'Error loading medical record';
+          this.isLoading = false;
+        }
+      }
+    });
   }
 
   onSubmit(): void {
     this.errorMessage = '';
     this.successMessage = '';
-    this.detailedError = '';
 
-    // Validate patientId
-    if (!this.record.patientId || this.record.patientId === 0) {
-      this.errorMessage = 'Please select a patient from the dropdown';
-      return;
-    }
+    console.log(`${this.isEditMode ? 'Updating' : 'Creating'} medical record:`, this.record);
 
-    console.log('Submitting patient record:', this.record);
-
-    this.patientRecordService.createPatientRecord(this.record).subscribe({
-      next: (created) => {
-        this.successMessage = `Patient record created successfully!`;
-        setTimeout(() => this.router.navigate(['/psychologist/patients']), 1500);
-      },
-      error: (error) => {
-        console.error('Full error object:', error);
-        this.errorMessage = error.error?.message || error.message || 'Failed to create patient record';
-        
-        if (error.error) {
-          this.detailedError = JSON.stringify(error.error, null, 2);
-        } else {
-          this.detailedError = error.message || 'Unknown error';
+    if (this.isEditMode && this.recordId) {
+      // UPDATE
+      this.patientRecordService.updatePatientRecord(this.recordId, this.record).subscribe({
+        next: (updated) => {
+          console.log('Record updated successfully:', updated);
+          this.successMessage = '✓ Medical record updated successfully!';
+          this.record = { ...updated };
+          
+          setTimeout(() => this.router.navigate(['/psychologist/patients']), 1500);
+        },
+        error: (error) => {
+          console.error('Error updating record:', error);
+          this.errorMessage = error.error?.message || 'Failed to update medical record';
         }
-      }
-    });
+      });
+    } else {
+      // CREATE
+      this.patientRecordService.createPatientRecord(this.record).subscribe({
+        next: (created) => {
+          console.log('Record created successfully:', created);
+          this.successMessage = '✓ Medical record initialized successfully!';
+          
+          this.recordId = created.id;
+          this.record = { ...created };
+          this.isEditMode = true;
+          
+          setTimeout(() => this.router.navigate(['/psychologist/patients']), 1500);
+        },
+        error: (error) => {
+          console.error('Error creating record:', error);
+          this.errorMessage = error.error?.message || 'Failed to create medical record';
+        }
+      });
+    }
+  }
+
+  goBack(): void {
+    this.router.navigate(['/psychologist/patients']);
   }
 }

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Service for managing Electronic Medical Records (EMR).
@@ -36,7 +37,8 @@ public class PatientRecordService {
         Patient patient = patientRepository.findById(patientId)
                 .orElseThrow(() -> new RuntimeException("Patient not found"));
 
-        // 2. Ensure a record doesn't already exist for this patient (OneToOne relationship)
+        // 2. Ensure a record doesn't already exist for this patient (OneToOne
+        // relationship)
         if (patientRecordRepository.findByPatientId(patientId).isPresent()) {
             throw new RuntimeException("A medical record already exists for this patient");
         }
@@ -44,7 +46,7 @@ public class PatientRecordService {
         // 3. Map only EMR-specific fields, avoiding duplication of patient core data
         PatientRecord record = new PatientRecord();
         record.setPatient(patient); // Automatically links to firstName, lastName, email, etc.
-        
+
         record.setCnp(request.getCnp());
         record.setOccupation(request.getOccupation());
         record.setAlternatePhone(request.getAlternatePhone());
@@ -56,7 +58,7 @@ public class PatientRecordService {
 
         PatientRecord saved = patientRecordRepository.save(record);
         logAudit(saved, "CREATED", "Electronic Medical Record initialized");
-        
+
         return saved;
     }
 
@@ -65,20 +67,24 @@ public class PatientRecordService {
      */
     public PatientRecord getPatientRecord(Long id) {
         PatientRecord record = patientRecordRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Patient record not found"));
-        
+                .orElseThrow(() -> new RuntimeException("Patient record not found"));
+
         logAudit(record, "VIEWED", "Medical record accessed");
         return record;
     }
 
+    public Optional<PatientRecord> getPatientRecordByPatientId(Long patientId) {
+        return patientRecordRepository.findByPatientId(patientId);
+    }
+
     /**
-     * Updates EMR-specific information. 
+     * Updates EMR-specific information.
      * Core identity data remains untouched to maintain data integrity.
      */
     @Transactional
     public PatientRecord updatePatientRecord(Long id, PatientRecordRequest request) {
         PatientRecord record = patientRecordRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Patient record not found"));
+                .orElseThrow(() -> new RuntimeException("Patient record not found"));
 
         // Update only supplementary EMR fields
         record.setCnp(request.getCnp());
@@ -91,7 +97,7 @@ public class PatientRecordService {
 
         PatientRecord saved = patientRecordRepository.save(record);
         logAudit(saved, "UPDATED", "Medical record information updated");
-        
+
         return saved;
     }
 
@@ -103,7 +109,7 @@ public class PatientRecordService {
     @Transactional
     public EmergencyContact addEmergencyContact(Long patientId, EmergencyContactRequest request) {
         Patient patient = patientRepository.findById(patientId)
-            .orElseThrow(() -> new RuntimeException("Patient not found"));
+                .orElseThrow(() -> new RuntimeException("Patient not found"));
 
         EmergencyContact contact = new EmergencyContact();
         contact.setPatient(patient);
@@ -118,12 +124,11 @@ public class PatientRecordService {
         contact.setPriority(request.getPriority());
 
         EmergencyContact saved = emergencyContactRepository.save(contact);
-        
+
         // Log action if a record exists for audit purposes
-        patientRecordRepository.findByPatientId(patientId).ifPresent(record -> 
-            logAudit(record, "CREATED", "Emergency contact added: " + contact.getFirstName() + " " + contact.getLastName())
-        );
-        
+        patientRecordRepository.findByPatientId(patientId).ifPresent(record -> logAudit(record, "CREATED",
+                "Emergency contact added: " + contact.getFirstName() + " " + contact.getLastName()));
+
         return saved;
     }
 
@@ -140,14 +145,13 @@ public class PatientRecordService {
     @Transactional
     public void deleteEmergencyContact(Long contactId) {
         EmergencyContact contact = emergencyContactRepository.findById(contactId)
-            .orElseThrow(() -> new RuntimeException("Emergency contact not found"));
-        
+                .orElseThrow(() -> new RuntimeException("Emergency contact not found"));
+
         Long patientId = contact.getPatient().getId();
         emergencyContactRepository.delete(contact);
 
-        patientRecordRepository.findByPatientId(patientId).ifPresent(record -> 
-            logAudit(record, "DELETED", "Emergency contact removed: " + contact.getFirstName() + " " + contact.getLastName())
-        );
+        patientRecordRepository.findByPatientId(patientId).ifPresent(record -> logAudit(record, "DELETED",
+                "Emergency contact removed: " + contact.getFirstName() + " " + contact.getLastName()));
     }
 
     // ==================== FR17.9: Audit Trail ====================

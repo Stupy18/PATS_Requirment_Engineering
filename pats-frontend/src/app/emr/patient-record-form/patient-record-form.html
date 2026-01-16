@@ -1,14 +1,26 @@
 <div class="container">
-  <div class="form-card">
-    <h2>Electronic Medical Record (EMR)</h2>
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-card">
+    <div class="spinner"></div>
+    <p>Loading medical record...</p>
+  </div>
+
+  <!-- Form Card -->
+  <div *ngIf="!isLoading" class="form-card">
+    <!-- Header -->
+    <div class="header-section">
+      <h2>{{ isEditMode ? '📝 Update Medical Record' : '🆕 Initialize Medical Record' }}</h2>
+      <button type="button" class="btn btn-back" (click)="goBack()">
+        ← Back to Patients
+      </button>
+    </div>
+
+    <p class="subtitle">
+      {{ isEditMode ? 'Update medical information for this patient' : 'Initialize electronic medical record' }}
+    </p>
     
     <div *ngIf="errorMessage" class="alert alert-error">
       <strong>Error:</strong> {{ errorMessage }}
-    </div>
-
-    <div *ngIf="detailedError" class="alert alert-debug">
-      <strong>Debug Info:</strong>
-      <pre>{{ detailedError }}</pre>
     </div>
     
     <div *ngIf="successMessage" class="alert alert-success">
@@ -17,59 +29,44 @@
 
     <form (ngSubmit)="onSubmit()" #recordForm="ngForm">
       
-      <div class="form-section highlight-section">
-        <h3>📋 Step 1: Select Patient</h3>
-        <div class="form-group">
-          <label for="patientId">Select Patient *</label>
-          <select
-            id="patientId"
-            name="patientId"
-            [(ngModel)]="record.patientId"
-            (change)="onPatientSelect()"
-            required
-            class="form-control"
-          >
-            <option value="0">-- Select a patient --</option>
-            <option *ngFor="let patient of patients" [value]="patient.id">
-              {{ patient.firstName }} {{ patient.lastName }} (ID: {{ patient.id }})
-            </option>
-          </select>
-          <small class="form-help" *ngIf="loadingPatients">Loading patients...</small>
-        </div>
-      </div>
-
+      <!-- Patient Info Display -->
       <div class="form-section info-display-section" *ngIf="selectedPatient">
-        <h3>👤 Patient Identity (Read-Only)</h3>
+        <h3>👤 Patient Information (Read-Only)</h3>
         <div class="patient-details-grid">
           <div class="detail-item">
             <label>Full Name</label>
-            <p>{{ selectedPatient.firstName }} {{ selectedPatient.lastName }}</p>
+            <p><strong>{{ selectedPatient.firstName }} {{ selectedPatient.lastName }}</strong></p>
+          </div>
+          <div class="detail-item">
+            <label>Patient ID</label>
+            <p>{{ selectedPatient.id }}</p>
           </div>
           <div class="detail-item">
             <label>Email Address</label>
-            <p>{{ selectedPatient.user?.email }}</p>
+            <p>{{ selectedPatient.user?.email || 'N/A' }}</p>
           </div>
           <div class="detail-item">
             <label>Date of Birth</label>
-            <p>{{ selectedPatient.dateOfBirth | date:'longDate' }}</p>
+            <p>{{ selectedPatient.dateOfBirth ? (selectedPatient.dateOfBirth | date:'mediumDate') : 'N/A' }}</p>
           </div>
           <div class="detail-item">
             <label>Gender</label>
             <p>{{ selectedPatient.gender || 'Not specified' }}</p>
           </div>
           <div class="detail-item">
-            <label>Core Phone</label>
+            <label>Phone Number</label>
             <p>{{ selectedPatient.phoneNumber || 'Not specified' }}</p>
           </div>
         </div>
-        <p class="info-note">💡 These details are managed in the core Patient Profile.</p>
+        <p class="info-note">💡 Core patient details are managed in the Patient Profile.</p>
       </div>
 
-      <div class="form-section" *ngIf="record.patientId !== 0">
-        <h3>🏥 Step 2: Medical Record Details</h3>
+      <!-- Medical Record Details -->
+      <div class="form-section">
+        <h3>🏥 Medical Record Details</h3>
         
         <div class="form-group">
-          <label for="cnp">CNP (Romanian Personal Code) *</label>
+          <label for="cnp">CNP (Personal Identification Number) *</label>
           <input
             type="text"
             id="cnp"
@@ -81,6 +78,7 @@
             class="form-control"
             placeholder="1234567890123"
           />
+          <small class="form-help">13-digit Romanian personal identification number</small>
         </div>
 
         <div class="form-row">
@@ -110,8 +108,9 @@
         </div>
       </div>
 
-      <div class="form-section" *ngIf="record.patientId !== 0">
-        <h3>📍 Medical Contact Address</h3>
+      <!-- Address Section -->
+      <div class="form-section">
+        <h3>📍 Contact Address</h3>
         
         <div class="form-group">
           <label for="streetAddress">Street Address</label>
@@ -121,6 +120,7 @@
             name="streetAddress"
             [(ngModel)]="record.streetAddress"
             class="form-control"
+            placeholder="Enter street address"
           />
         </div>
 
@@ -133,6 +133,7 @@
               name="city"
               [(ngModel)]="record.city"
               class="form-control"
+              placeholder="City name"
             />
           </div>
 
@@ -144,6 +145,7 @@
               name="county"
               [(ngModel)]="record.county"
               class="form-control"
+              placeholder="County or state"
             />
           </div>
 
@@ -155,23 +157,25 @@
               name="postalCode"
               [(ngModel)]="record.postalCode"
               class="form-control"
+              placeholder="Postal/ZIP code"
             />
           </div>
         </div>
       </div>
 
+      <!-- Form Actions -->
       <div class="form-actions">
         <button 
           type="submit" 
           class="btn btn-primary" 
-          [disabled]="!recordForm.valid || record.patientId === 0"
+          [disabled]="!recordForm.valid"
         >
-          Initialize Medical Record
+          {{ isEditMode ? '✓ Update Record' : '✓ Initialize Record' }}
         </button>
         <button 
           type="button" 
           class="btn btn-secondary" 
-          (click)="router.navigate(['/psychologist/dashboard'])"
+          (click)="goBack()"
         >
           Cancel
         </button>

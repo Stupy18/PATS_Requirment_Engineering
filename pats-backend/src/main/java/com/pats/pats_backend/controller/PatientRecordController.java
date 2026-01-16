@@ -38,6 +38,14 @@ public class PatientRecordController {
         return ResponseEntity.ok(service.getPatientRecord(id));
     }
 
+    @GetMapping("/records/patient/{patientId}")
+    @PreAuthorize("hasAnyRole('PSYCHOLOGIST', 'PATIENT')")
+    public ResponseEntity<PatientRecord> getRecordByPatientId(@PathVariable Long patientId) {
+        return service.getPatientRecordByPatientId(patientId)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
     @PutMapping("/records/{id}")
     @PreAuthorize("hasRole('PSYCHOLOGIST')")
     public ResponseEntity<PatientRecord> updateRecord(

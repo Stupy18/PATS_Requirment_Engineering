@@ -1,6 +1,9 @@
 <div class="emergency-contacts">
   <div class="header">
-    <h3>Emergency Contacts - FR17.6</h3>
+    <button class="btn btn-back" (click)="goBack()">
+      ← Back to Patients
+    </button>
+    <h3>Emergency Contacts</h3>
     <button class="btn btn-primary" (click)="toggleAddForm()">
       {{ showAddForm ? 'Cancel' : '+ Add Emergency Contact' }}
     </button>

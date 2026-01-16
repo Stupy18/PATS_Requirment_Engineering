@@ -4,11 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PatientRecordService } from '../../services/patient-record.service';
 import { EmergencyContact } from '../../models/emergency-contact.model';
+import {NavbarComponent} from '../../shared/navbar/navbar';
 
 @Component({
   selector: 'app-emergency-contacts',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, NavbarComponent],
   templateUrl: './emergency-contacts.html',
   styleUrls: ['./emergency-contacts.scss']
 })
@@ -17,7 +18,7 @@ export class EmergencyContactsComponent implements OnInit {
 
   contacts: EmergencyContact[] = [];
   showAddForm = false;
-  
+
   newContact: EmergencyContact = {
     patientId: 0,
     firstName: '',
@@ -42,7 +43,7 @@ export class EmergencyContactsComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.patientId = +params['id'];
       console.log('Emergency Contacts - Patient ID:', this.patientId);
-      
+
       if (this.patientId) {
         this.loadContacts();
       } else {
@@ -56,9 +57,9 @@ export class EmergencyContactsComponent implements OnInit {
       console.error('Cannot load contacts - patientId is undefined');
       return;
     }
-    
+
     console.log('Loading contacts for patient:', this.patientId);
-    
+
     this.patientRecordService.getEmergencyContacts(this.patientId).subscribe({
       next: (contacts) => {
         console.log('Contacts loaded:', contacts);
@@ -94,7 +95,7 @@ export class EmergencyContactsComponent implements OnInit {
 
   onSubmit(): void {
     console.log('Submitting emergency contact for patient:', this.patientId);
-    
+
     if (!this.patientId) {
       this.errorMessage = 'Patient ID is missing!';
       console.error('Cannot submit - patientId is undefined');

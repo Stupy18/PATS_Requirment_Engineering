@@ -4,11 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { PatientService } from '../../services/patient.service';
 import { CreatePatientRequest } from '../../models/patient.model';
+import {NavbarComponent} from '../../shared/navbar/navbar';
 
 @Component({
   selector: 'app-add-patient',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, NavbarComponent],
   templateUrl: './patient.html',
   styleUrls: ['./patient.scss']
 })
@@ -44,7 +45,7 @@ export class AddPatientComponent {
         console.log('Patient created successfully:', created);
         this.successMessage = `Patient ${created.firstName} ${created.lastName} created successfully! (ID: ${created.id})`;
         this.isSubmitting = false;
-        
+
         // Redirect to patient list or EMR form after 2 seconds
         setTimeout(() => {
           this.router.navigate(['/psychologist/patients']);
@@ -62,8 +63,8 @@ export class AddPatientComponent {
     // Auto-generate username from first and last name
     if (this.patientData.firstName && this.patientData.lastName) {
       this.patientData.username = (
-        this.patientData.firstName.toLowerCase() + 
-        '.' + 
+        this.patientData.firstName.toLowerCase() +
+        '.' +
         this.patientData.lastName.toLowerCase()
       ).replace(/\s+/g, '');
     }

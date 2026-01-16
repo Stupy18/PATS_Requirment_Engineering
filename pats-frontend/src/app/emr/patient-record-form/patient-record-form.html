@@ -1,185 +1,192 @@
-<div class="container">
-  <!-- Loading State -->
-  <div *ngIf="isLoading" class="loading-card">
-    <div class="spinner"></div>
-    <p>Loading medical record...</p>
-  </div>
+<div class="dashboard-container">
+  <app-navbar></app-navbar>
+  <div class="container">
+    <div class="dashboard-layout">
+      <div class="content-area">
+        <!-- Loading State -->
+        <div *ngIf="isLoading" class="loading-card">
+          <div class="spinner"></div>
+          <p>Loading medical record...</p>
+        </div>
 
-  <!-- Form Card -->
-  <div *ngIf="!isLoading" class="form-card">
-    <!-- Header -->
-    <div class="header-section">
-      <h2>{{ isEditMode ? '📝 Update Medical Record' : '🆕 Initialize Medical Record' }}</h2>
-      <button type="button" class="btn btn-back" (click)="goBack()">
-        ← Back to Patients
-      </button>
+        <!-- Form Card -->
+        <div *ngIf="!isLoading" class="form-card">
+          <!-- Header -->
+          <div class="header-section">
+            <h2>{{ isEditMode ? '📝 Update Medical Record' : '🆕 Initialize Medical Record' }}</h2>
+            <button type="button" class="btn btn-back" (click)="goBack()">
+              ← Back to Patients
+            </button>
+          </div>
+
+          <p class="subtitle">
+            {{ isEditMode ? 'Update medical information for this patient' : 'Initialize electronic medical record' }}
+          </p>
+
+          <div *ngIf="errorMessage" class="alert alert-error">
+            <strong>Error:</strong> {{ errorMessage }}
+          </div>
+
+          <div *ngIf="successMessage" class="alert alert-success">
+            {{ successMessage }}
+          </div>
+
+          <form (ngSubmit)="onSubmit()" #recordForm="ngForm">
+
+            <!-- Patient Info Display -->
+            <div class="form-section info-display-section" *ngIf="selectedPatient">
+              <h3>👤 Patient Information (Read-Only)</h3>
+              <div class="patient-details-grid">
+                <div class="detail-item">
+                  <label>Full Name</label>
+                  <p><strong>{{ selectedPatient.firstName }} {{ selectedPatient.lastName }}</strong></p>
+                </div>
+                <div class="detail-item">
+                  <label>Patient ID</label>
+                  <p>{{ selectedPatient.id }}</p>
+                </div>
+                <div class="detail-item">
+                  <label>Email Address</label>
+                  <p>{{ selectedPatient.user?.email || 'N/A' }}</p>
+                </div>
+                <div class="detail-item">
+                  <label>Date of Birth</label>
+                  <p>{{ selectedPatient.dateOfBirth ? (selectedPatient.dateOfBirth | date:'mediumDate') : 'N/A' }}</p>
+                </div>
+                <div class="detail-item">
+                  <label>Gender</label>
+                  <p>{{ selectedPatient.gender || 'Not specified' }}</p>
+                </div>
+                <div class="detail-item">
+                  <label>Phone Number</label>
+                  <p>{{ selectedPatient.phoneNumber || 'Not specified' }}</p>
+                </div>
+              </div>
+              <p class="info-note">💡 Core patient details are managed in the Patient Profile.</p>
+            </div>
+
+            <!-- Medical Record Details -->
+            <div class="form-section">
+              <h3>🏥 Medical Record Details</h3>
+
+              <div class="form-group">
+                <label for="cnp">CNP (Personal Identification Number) *</label>
+                <input
+                  type="text"
+                  id="cnp"
+                  name="cnp"
+                  [(ngModel)]="record.cnp"
+                  required
+                  maxlength="13"
+                  minlength="13"
+                  class="form-control"
+                  placeholder="1234567890123"
+                />
+                <small class="form-help">13-digit Romanian personal identification number</small>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="occupation">Occupation</label>
+                  <input
+                    type="text"
+                    id="occupation"
+                    name="occupation"
+                    [(ngModel)]="record.occupation"
+                    class="form-control"
+                    placeholder="e.g. Software Engineer"
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label for="alternatePhone">Alternate Phone</label>
+                  <input
+                    type="tel"
+                    id="alternatePhone"
+                    name="alternatePhone"
+                    [(ngModel)]="record.alternatePhone"
+                    class="form-control"
+                    placeholder="Secondary contact number"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <!-- Address Section -->
+            <div class="form-section">
+              <h3>📍 Contact Address</h3>
+
+              <div class="form-group">
+                <label for="streetAddress">Street Address</label>
+                <input
+                  type="text"
+                  id="streetAddress"
+                  name="streetAddress"
+                  [(ngModel)]="record.streetAddress"
+                  class="form-control"
+                  placeholder="Enter street address"
+                />
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="city">City</label>
+                  <input
+                    type="text"
+                    id="city"
+                    name="city"
+                    [(ngModel)]="record.city"
+                    class="form-control"
+                    placeholder="City name"
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label for="county">County/State</label>
+                  <input
+                    type="text"
+                    id="county"
+                    name="county"
+                    [(ngModel)]="record.county"
+                    class="form-control"
+                    placeholder="County or state"
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label for="postalCode">Postal Code</label>
+                  <input
+                    type="text"
+                    id="postalCode"
+                    name="postalCode"
+                    [(ngModel)]="record.postalCode"
+                    class="form-control"
+                    placeholder="Postal/ZIP code"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <!-- Form Actions -->
+            <div class="form-actions">
+              <button
+                type="submit"
+                class="btn btn-primary"
+                [disabled]="!recordForm.valid"
+              >
+                {{ isEditMode ? '✓ Update Record' : '✓ Initialize Record' }}
+              </button>
+              <button
+                type="button"
+                class="btn btn-secondary"
+                (click)="goBack()"
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
-
-    <p class="subtitle">
-      {{ isEditMode ? 'Update medical information for this patient' : 'Initialize electronic medical record' }}
-    </p>
-    
-    <div *ngIf="errorMessage" class="alert alert-error">
-      <strong>Error:</strong> {{ errorMessage }}
-    </div>
-    
-    <div *ngIf="successMessage" class="alert alert-success">
-      {{ successMessage }}
-    </div>
-
-    <form (ngSubmit)="onSubmit()" #recordForm="ngForm">
-      
-      <!-- Patient Info Display -->
-      <div class="form-section info-display-section" *ngIf="selectedPatient">
-        <h3>👤 Patient Information (Read-Only)</h3>
-        <div class="patient-details-grid">
-          <div class="detail-item">
-            <label>Full Name</label>
-            <p><strong>{{ selectedPatient.firstName }} {{ selectedPatient.lastName }}</strong></p>
-          </div>
-          <div class="detail-item">
-            <label>Patient ID</label>
-            <p>{{ selectedPatient.id }}</p>
-          </div>
-          <div class="detail-item">
-            <label>Email Address</label>
-            <p>{{ selectedPatient.user?.email || 'N/A' }}</p>
-          </div>
-          <div class="detail-item">
-            <label>Date of Birth</label>
-            <p>{{ selectedPatient.dateOfBirth ? (selectedPatient.dateOfBirth | date:'mediumDate') : 'N/A' }}</p>
-          </div>
-          <div class="detail-item">
-            <label>Gender</label>
-            <p>{{ selectedPatient.gender || 'Not specified' }}</p>
-          </div>
-          <div class="detail-item">
-            <label>Phone Number</label>
-            <p>{{ selectedPatient.phoneNumber || 'Not specified' }}</p>
-          </div>
-        </div>
-        <p class="info-note">💡 Core patient details are managed in the Patient Profile.</p>
-      </div>
-
-      <!-- Medical Record Details -->
-      <div class="form-section">
-        <h3>🏥 Medical Record Details</h3>
-        
-        <div class="form-group">
-          <label for="cnp">CNP (Personal Identification Number) *</label>
-          <input
-            type="text"
-            id="cnp"
-            name="cnp"
-            [(ngModel)]="record.cnp"
-            required
-            maxlength="13"
-            minlength="13"
-            class="form-control"
-            placeholder="1234567890123"
-          />
-          <small class="form-help">13-digit Romanian personal identification number</small>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label for="occupation">Occupation</label>
-            <input
-              type="text"
-              id="occupation"
-              name="occupation"
-              [(ngModel)]="record.occupation"
-              class="form-control"
-              placeholder="e.g. Software Engineer"
-            />
-          </div>
-
-          <div class="form-group">
-            <label for="alternatePhone">Alternate Phone</label>
-            <input
-              type="tel"
-              id="alternatePhone"
-              name="alternatePhone"
-              [(ngModel)]="record.alternatePhone"
-              class="form-control"
-              placeholder="Secondary contact number"
-            />
-          </div>
-        </div>
-      </div>
-
-      <!-- Address Section -->
-      <div class="form-section">
-        <h3>📍 Contact Address</h3>
-        
-        <div class="form-group">
-          <label for="streetAddress">Street Address</label>
-          <input
-            type="text"
-            id="streetAddress"
-            name="streetAddress"
-            [(ngModel)]="record.streetAddress"
-            class="form-control"
-            placeholder="Enter street address"
-          />
-        </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label for="city">City</label>
-            <input
-              type="text"
-              id="city"
-              name="city"
-              [(ngModel)]="record.city"
-              class="form-control"
-              placeholder="City name"
-            />
-          </div>
-
-          <div class="form-group">
-            <label for="county">County/State</label>
-            <input
-              type="text"
-              id="county"
-              name="county"
-              [(ngModel)]="record.county"
-              class="form-control"
-              placeholder="County or state"
-            />
-          </div>
-
-          <div class="form-group">
-            <label for="postalCode">Postal Code</label>
-            <input
-              type="text"
-              id="postalCode"
-              name="postalCode"
-              [(ngModel)]="record.postalCode"
-              class="form-control"
-              placeholder="Postal/ZIP code"
-            />
-          </div>
-        </div>
-      </div>
-
-      <!-- Form Actions -->
-      <div class="form-actions">
-        <button 
-          type="submit" 
-          class="btn btn-primary" 
-          [disabled]="!recordForm.valid"
-        >
-          {{ isEditMode ? '✓ Update Record' : '✓ Initialize Record' }}
-        </button>
-        <button 
-          type="button" 
-          class="btn btn-secondary" 
-          (click)="goBack()"
-        >
-          Cancel
-        </button>
-      </div>
-    </form>
   </div>
 </div>

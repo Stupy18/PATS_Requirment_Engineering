@@ -5,13 +5,10 @@
 }
 
 .dashboard-layout {
-  min-height: 100vh;
-  background: #fafbfc;
-}
-
-.main-layout {
   display: grid;
   grid-template-columns: 240px 1fr;
+  min-height: 100vh;
+  background: #fafbfc;
 }
 
 .sidebar {
@@ -295,7 +292,7 @@
 }
 
 @media (max-width: 768px) {
-  .main-layout {
+  .dashboard-layout {
     grid-template-columns: 1fr;
   }
 

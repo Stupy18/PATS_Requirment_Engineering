@@ -3,17 +3,11 @@ package com.pats.pats_backend.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "mood_entries")
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class MoodEntry {
 
     @Id
@@ -43,6 +37,67 @@ public class MoodEntry {
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    // no-arg constructor
+    public MoodEntry() {
+    }
+
+    // getters and setters
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Patient getPatient() {
+        return patient;
+    }
+
+    public void setPatient(Patient patient) {
+        this.patient = patient;
+    }
+
+    public Integer getEmotionalRating() {
+        return emotionalRating;
+    }
+
+    public void setEmotionalRating(Integer emotionalRating) {
+        this.emotionalRating = emotionalRating;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
+    public LocalDateTime getEntryTimestamp() {
+        return entryTimestamp;
+    }
+
+    public void setEntryTimestamp(LocalDateTime entryTimestamp) {
+        this.entryTimestamp = entryTimestamp;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
 
     @PrePersist
     protected void onCreate() {

@@ -22,7 +22,6 @@ public class EmergencyContact {
     @JoinColumn(name = "patient_id", nullable = false)
     private Patient patient;
 
-    // FR17.6 - Emergency contact info
     @Column(name = "first_name", nullable = false)
     private String firstName;
 

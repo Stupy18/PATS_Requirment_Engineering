@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AppointmentService } from '../../services/appointment.service';
 import { Appointment, AppointmentHistory } from '../../models/appointment.model';
+import {NavbarComponent} from "../../shared/navbar/navbar";
 
 @Component({
   selector: 'app-appointment-history',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+    imports: [CommonModule, FormsModule, NavbarComponent],
   templateUrl: './appointment-history.component.html',
   styleUrls: ['./appointment-history.component.scss']
 })

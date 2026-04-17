@@ -6,11 +6,12 @@ import { PatientRecordService } from '../../services/patient-record.service';
 import { PatientService } from '../../services/patient.service';
 import { PatientRecord } from '../../models/patient-record.model';
 import { Patient } from '../../models/patient.model';
+import {NavbarComponent} from '../../shared/navbar/navbar';
 
 @Component({
   selector: 'app-patient-record-form',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, NavbarComponent],
   templateUrl: './patient-record-form.html',
   styleUrls: ['./patient-record-form.scss']
 })
@@ -32,7 +33,7 @@ export class PatientRecordFormComponent implements OnInit {
   };
 
   selectedPatient?: Patient;
-  
+
   errorMessage: string = '';
   successMessage: string = '';
 
@@ -46,7 +47,7 @@ export class PatientRecordFormComponent implements OnInit {
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       this.patientId = +params['id'];
-      
+
       if (!this.patientId) {
         this.errorMessage = 'Patient ID is missing!';
         this.isLoading = false;
@@ -55,7 +56,7 @@ export class PatientRecordFormComponent implements OnInit {
 
       console.log('Patient ID from URL:', this.patientId);
       this.record.patientId = this.patientId;
-      
+
       this.loadPatientData();
       this.loadExistingRecord();
     });
@@ -66,7 +67,7 @@ export class PatientRecordFormComponent implements OnInit {
       next: (patient) => {
         console.log('Patient data loaded:', patient);
         this.selectedPatient = patient;
-        
+
         if (!this.isEditMode && !this.record.city) {
           this.record.city = patient.city;
           this.record.postalCode = patient.postalCode;
@@ -84,17 +85,17 @@ export class PatientRecordFormComponent implements OnInit {
     this.patientRecordService.getPatientRecordByPatientId(this.patientId).subscribe({
       next: (existingRecord) => {
         console.log('Existing medical record found:', existingRecord);
-        
+
         this.recordId = existingRecord.id;
         this.record = { ...existingRecord };
         this.isEditMode = true;
         this.isLoading = false;
-        
+
         this.successMessage = '✓ Medical record loaded. Update information below.';
       },
       error: (error) => {
         console.log('No existing record found:', error);
-        
+
         if (error.status === 404) {
           this.isEditMode = false;
           this.isLoading = false;
@@ -119,7 +120,7 @@ export class PatientRecordFormComponent implements OnInit {
           console.log('Record updated successfully:', updated);
           this.successMessage = '✓ Medical record updated successfully!';
           this.record = { ...updated };
-          
+
           setTimeout(() => this.router.navigate(['/psychologist/patients']), 1500);
         },
         error: (error) => {
@@ -133,11 +134,11 @@ export class PatientRecordFormComponent implements OnInit {
         next: (created) => {
           console.log('Record created successfully:', created);
           this.successMessage = '✓ Medical record initialized successfully!';
-          
+
           this.recordId = created.id;
           this.record = { ...created };
           this.isEditMode = true;
-          
+
           setTimeout(() => this.router.navigate(['/psychologist/patients']), 1500);
         },
         error: (error) => {

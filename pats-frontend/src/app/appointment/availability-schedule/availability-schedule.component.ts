@@ -4,11 +4,12 @@ import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } 
 import { AppointmentService } from '../../services/appointment.service';
 import { AvailabilityService } from '../../services/availability.service';
 import { Appointment, Availability } from '../../models/appointment.model';
+import {NavbarComponent} from "../../shared/navbar/navbar";
 
 @Component({
   selector: 'app-availability-schedule',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+    imports: [CommonModule, FormsModule, ReactiveFormsModule, NavbarComponent],
   templateUrl: './availability-schedule.component.html',
   styleUrls: ['./availability-schedule.component.scss']
 })
